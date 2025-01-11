@@ -1,4 +1,5 @@
 # SlimBrave
+![slimbravelogo](https://github.com/user-attachments/assets/c972ef88-0406-4cfa-8acc-912db4a94541)
 
 ## Brave Browser Debloater
 
