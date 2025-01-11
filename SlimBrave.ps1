@@ -56,13 +56,9 @@ function Toggle {
     $currentValue = Get-ItemProperty -Path $regKey -Name $feature -ErrorAction SilentlyContinue
     
     if ($currentValue.$feature -eq 1) {
-        # If it's disabled, enable it by setting the value to 0
         Set-ItemProperty -Path $regKey -Name $feature -Value 0 -Force
-        Write-Host "$feature has been enabled."
     } else {
-        # If it's not disabled or doesn't exist, disable it by setting the value to 1
         Set-ItemProperty -Path $regKey -Name $feature -Value 1 -Force
-        Write-Host "$feature has been disabled."
     }
 }
 
