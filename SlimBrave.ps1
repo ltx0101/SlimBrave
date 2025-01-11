@@ -1,16 +1,11 @@
-﻿@echo off
-
-:: Check for administrative privileges
-openfiles >nul 2>&1
-if %errorlevel% neq 0 (
-    echo This script requires administrative privileges.
-    echo Please run as an administrator.
-    pause
-    :: Re-run the script as administrator
-    powershell -Command "Start-Process '%~f0' -Verb RunAs"
+# Check for administrative privileges
+if (-not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) {
+    Write-Output "This script requires administrative privileges. Please run as an administrator."
+    Start-Process powershell -ArgumentList "Start-Process PowerShell -ArgumentList '-File', `"$($MyInvocation.MyCommand.Path)`" -Verb RunAs" -Verb RunAs
     exit
-)
+}
 
+Write-Output "Running with administrative privileges."
 :menu
 cls
 echo Multi-Selection Menu for Brave Browser Registry Settings
