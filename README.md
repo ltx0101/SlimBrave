@@ -1,5 +1,6 @@
-#SlimBrave
-##Brave Browser Debloater
+# SlimBrave
+
+## Brave Browser Debloater
 
 SlimBrave is a powerful PowerShell script designed for Windows users to streamline their Brave Browser experience by toggling and configuring unwanted features. With SlimBrave, you can easily disable or enable various Brave functionalities, customize settings, and improve privacy.
 
