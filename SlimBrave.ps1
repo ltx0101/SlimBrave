@@ -1,73 +1,87 @@
 # Check for administrative privileges
-if (-not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) {
+if (-not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
     Write-Output "This script requires administrative privileges. Please run as an administrator."
-    Start-Process powershell -ArgumentList "Start-Process PowerShell -ArgumentList '-File', `"$($MyInvocation.MyCommand.Path)`" -Verb RunAs" -Verb RunAs
+    Start-Process powershell -ArgumentList "-File `"$($MyInvocation.MyCommand.Path)`"" -Verb RunAs
     exit
 }
 
-Write-Output "Running with administrative privileges."
-:menu
-cls
-echo Multi-Selection Menu for Brave Browser Registry Settings
-echo ---------------------------------------------------------
-echo 1. Disable/Enable Brave Rewards
-echo 2. Disable/Enable Brave Wallet
-echo 3. Disable/Enable Brave VPN
-echo 4. Disable/Enable Brave AI Chat
-echo 5. Set New Tab Page Location
-echo 6. Disable/Enable Password Manager
-echo 7. Disable/Enable Tor
-echo 8. Set DNS Over HTTPS Mode
-echo 9. Disable/Enable Brave Ads
-echo 10. Disable/Enable Sync
-echo ---------------------------------------------------------
-echo 11. Exit
-echo.
-set /p choice=Enter the number of your choice (separate multiple by commas): 
+function Show-Menu {
+    Clear-Host
+    Write-Output "Multi-Selection Menu for Brave Browser Registry Settings"
+    Write-Output "---------------------------------------------------------"
+    Write-Output "1. Disable/Enable Brave Rewards"
+    Write-Output "2. Disable/Enable Brave Wallet"
+    Write-Output "3. Disable/Enable Brave VPN"
+    Write-Output "4. Disable/Enable Brave AI Chat"
+    Write-Output "5. Set New Tab Page Location"
+    Write-Output "6. Disable/Enable Password Manager"
+    Write-Output "7. Disable/Enable Tor"
+    Write-Output "8. Set DNS Over HTTPS Mode"
+    Write-Output "9. Disable/Enable Brave Ads"
+    Write-Output "10. Disable/Enable Sync"
+    Write-Output "---------------------------------------------------------"
+    Write-Output "11. Exit"
+    Write-Output ""
+}
 
-:: Process each selected option
-for %%i in (%choice%) do (
-    if %%i==1 call :toggle "BraveRewardsDisabled"
-    if %%i==2 call :toggle "BraveWalletDisabled"
-    if %%i==3 call :toggle "BraveVPNDisabled"
-    if %%i==4 call :toggle "BraveAIChatEnabled"
-    if %%i==5 call :set_new_tab
-    if %%i==6 call :toggle "PasswordManagerEnabled"
-    if %%i==7 call :toggle "TorDisabled"
-    if %%i==8 call :set_dns_mode
-    if %%i==9 call :toggle "BraveAdsEnabled"
-    if %%i==10 call :toggle "SyncDisabled"
-    if %%i==11 goto :exit
-)
+function Process-Choice {
+    param (
+        [string[]] $choices
+    )
+    foreach ($i in $choices) {
+        switch ($i) {
+            1 { Toggle "BraveRewardsDisabled" }
+            2 { Toggle "BraveWalletDisabled" }
+            3 { Toggle "BraveVPNDisabled" }
+            4 { Toggle "BraveAIChatEnabled" }
+            5 { Set-NewTab }
+            6 { Toggle "PasswordManagerEnabled" }
+            7 { Toggle "TorDisabled" }
+            8 { Set-DnsMode }
+            9 { Toggle "BraveAdsEnabled" }
+            10 { Toggle "SyncDisabled" }
+            11 { exit }
+            default { Write-Host "Invalid choice: $i" }
+        }
+    }
+}
 
-goto :menu
+function Toggle {
+    param (
+        [string] $feature
+    )
+    $regKey = "HKLM:\Software\Policies\BraveSoftware\Brave"
+    
+    # Check the current value of the feature
+    $currentValue = Get-ItemProperty -Path $regKey -Name $feature -ErrorAction SilentlyContinue
+    
+    if ($currentValue.$feature -eq 1) {
+        # If it's disabled, enable it by setting the value to 0
+        Set-ItemProperty -Path $regKey -Name $feature -Value 0 -Force
+        Write-Host "$feature has been enabled."
+    } else {
+        # If it's not disabled or doesn't exist, disable it by setting the value to 1
+        Set-ItemProperty -Path $regKey -Name $feature -Value 1 -Force
+        Write-Host "$feature has been disabled."
+    }
+}
 
-:toggle
-set regkey=HKLM\Software\Policies\BraveSoftware\Brave
-reg query "%regkey%" /v %1 >nul
-if %errorlevel%==0 (
-    reg delete "%regkey%" /v %1 /f
-    echo %1 has been enabled.
-) else (
-    reg add "%regkey%" /v %1 /t REG_DWORD /d 1 /f
-    echo %1 has been disabled.
-)
-pause
-goto :eof
+function Set-NewTab {
+    $newTab = Read-Host "Enter new tab page URL"
+    Set-ItemProperty -Path "HKLM:\Software\Policies\BraveSoftware\Brave" -Name "NewTabPageLocation" -Value $newTab -Type String -Force
+    Write-Host "New Tab Page Location has been set."
+}
 
-:set_new_tab
-set /p new_tab="Enter new tab page URL: "
-reg add "HKLM\Software\Policies\BraveSoftware\Brave" /v "NewTabPageLocation" /t REG_SZ /d "%new_tab%" /f
-echo New Tab Page Location has been set.
-pause
-goto :eof
+function Set-DnsMode {
+    $dnsMode = Read-Host "Enter DNS Over HTTPS mode (e.g., automatic, off)"
+    Set-ItemProperty -Path "HKLM:\Software\Policies\BraveSoftware\Brave" -Name "DnsOverHttpsMode" -Value $dnsMode -Type String -Force
+    Write-Host "DNS Over HTTPS Mode has been set."
+}
 
-:set_dns_mode
-set /p dns_mode="Enter DNS Over HTTPS mode (e.g., automatic, off): "
-reg add "HKLM\Software\Policies\BraveSoftware\Brave" /v "DnsOverHttpsMode" /t REG_SZ /d "%dns_mode%" /f
-echo DNS Over HTTPS Mode has been set.
-pause
-goto :eof
-
-:exit
-exit
+# Main Loop
+do {
+    Show-Menu
+    $choice = Read-Host "Enter the number of your choice (separate multiple by commas)"
+    $choices = $choice -split ','
+    Process-Choice -choices $choices
+} while ($true)
