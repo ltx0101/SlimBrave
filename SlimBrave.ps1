@@ -9,16 +9,16 @@ function Show-Menu {
     Clear-Host
     Write-Output "Multi-Selection Menu for Brave Browser Registry Settings"
     Write-Output "---------------------------------------------------------"
-    Write-Output "1. Disable/Enable Brave Rewards"
-    Write-Output "2. Disable/Enable Brave Wallet"
-    Write-Output "3. Disable/Enable Brave VPN"
-    Write-Output "4. Disable/Enable Brave AI Chat"
-    Write-Output "5. Set New Tab Page Location"
-    Write-Output "6. Disable/Enable Password Manager"
-    Write-Output "7. Disable/Enable Tor"
-    Write-Output "8. Set DNS Over HTTPS Mode"
-    Write-Output "9. Disable/Enable Brave Ads"
-    Write-Output "10. Disable/Enable Sync"
+    Write-Output " 1. Disable/Enable Brave Rewards"
+    Write-Output " 2. Disable/Enable Brave Wallet"
+    Write-Output " 3. Disable/Enable Brave VPN"
+    Write-Output " 4. Disable/Enable Brave AI Chat"
+    Write-Output " 5. Disable/Enable Password Manager"
+    Write-Output " 6. Disable/Enable Tor"
+    Write-Output " 7. Disable/Enable Automatic HTTPS upgrades"
+    Write-Output " 8. Disable/Enable Brave Ads"
+    Write-Output " 9. Disable/Enable Sync"
+    Write-Output "10. Set DNS Over HTTPS Mode"
     Write-Output "---------------------------------------------------------"
     Write-Output "11. Exit"
     Write-Output ""
@@ -34,12 +34,12 @@ function Process-Choice {
             2 { Toggle "BraveWalletDisabled" }
             3 { Toggle "BraveVPNDisabled" }
             4 { Toggle "BraveAIChatEnabled" }
-            5 { Set-NewTab }
-            6 { Toggle "PasswordManagerEnabled" }
-            7 { Toggle "TorDisabled" }
-            8 { Set-DnsMode }
-            9 { Toggle "BraveAdsEnabled" }
-            10 { Toggle "SyncDisabled" }
+            5 { Toggle "PasswordManagerEnabled" }
+            6 { Toggle "TorDisabled" }
+            7 { Toggle "HttpsUpgradesEnabled" }
+            8 { Toggle "BraveAdsEnabled" }
+            9 { Toggle "SyncDisabled" }
+            10 { Set-DnsMode }
             11 { exit }
             default { Write-Host "Invalid choice: $i" }
         }
@@ -60,12 +60,6 @@ function Toggle {
     } else {
         Set-ItemProperty -Path $regKey -Name $feature -Value 1 -Force
     }
-}
-
-function Set-NewTab {
-    $newTab = Read-Host "Enter new tab page URL"
-    Set-ItemProperty -Path "HKLM:\Software\Policies\BraveSoftware\Brave" -Name "NewTabPageLocation" -Value $newTab -Type String -Force
-    Write-Host "New Tab Page Location has been set."
 }
 
 function Set-DnsMode {
