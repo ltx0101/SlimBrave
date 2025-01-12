@@ -4,6 +4,33 @@ if (-not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdent
     Start-Process powershell -ArgumentList "-File `"$($MyInvocation.MyCommand.Path)`"" -Verb RunAs
     exit
 }
+$registryPath = "HKLM:\SOFTWARE\Policies\BraveSoftware\Brave\"
+
+if (-not (Test-Path -Path $registryPath)) {
+    New-Item -Path $registryPath -Force
+}
+
+$registryKeys = @{
+    "BraveRewardsDisabled" = 1
+    "BraveWalletDisabled" = 1
+    "BraveVPNDisabled" = 1
+    "BraveAIChatEnabled" = 1
+    "PasswordManagerEnabled" = 1
+    "TorDisabled" = 1
+    "DnsOverHttpsMode" = 2
+    "BraveAdsEnabled" = 1
+    "SyncDisabled" = 1
+}
+
+foreach ($key in $registryKeys.Keys) {
+    $keyPath = "$registryPath\$key"
+    if (-not (Test-Path -Path $keyPath)) {
+        New-ItemProperty -Path $registryPath -Name $key -Value $registryKeys[$key] -PropertyType DWord -Force
+        Write-Host "Added registry key: $key with value $($registryKeys[$key])"
+    } else {
+        Write-Host "Registry key $key already exists."
+    }
+}
 
 function Show-Menu {
     Clear-Host
