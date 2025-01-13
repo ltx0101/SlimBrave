@@ -7,35 +7,32 @@
 SlimBrave is a powerful PowerShell script designed for Windows users to streamline their Brave Browser experience by toggling and configuring unwanted features. With SlimBrave, you can easily disable or enable various Brave functionalities, customize settings, and improve privacy.
 
 ## Features
-1.**Disable/Enable Brave Rewards**
-Toggle Brave's reward system on or off.
+1. **Disable Brave Rewards**
+Disable Brave's reward system.
 
-2.**Disable/Enable Brave Wallet**
-Disable or enable Brave Wallet feature for managing cryptocurrencies.
+2. **Disable Brave Wallet**
+Disable Brave's Wallet feature for managing cryptocurrencies.
 
-3.**Disable/Enable Brave VPN**
-Turn off or on the Brave VPN feature for enhanced privacy.
+3. **Disable Brave VPN**
+Disable Brave's VPN feature for enhanced privacy.
 
-4.**Disable/Enable Brave AI Chat**
-Toggle Brave's integrated AI Chat feature on or off.
+4. **Disable Brave AI Chat**
+Disable Brave's integrated AI Chat feature.
 
-5.**Set New Tab Page Location**
-Configure a custom URL to be used as the new tab page in Brave.
+5. **Disable Password Manager**
+Disable Brave's built-in password manager for website login credentials.
 
-6.**Disable/Enable Password Manager**
-Enable or disable Brave's built-in password manager for website login credentials.
+6. **Disable/Enable Tor**
+Disable Tor functionality for anonymous browsing.
 
-7.**Disable/Enable Tor**
-Toggle the Tor functionality for anonymous browsing.
-
-8.**Set DNS Over HTTPS Mode**
+7. **Set DNS Over HTTPS Mode**
 Set the DNS Over HTTPS mode (options include automatic or off) to ensure private browsing with secure DNS queries.
 
-9.**Disable/Enable Brave Ads**
-Manage the Brave Ads feature by enabling or disabling it.
+8. **Disable Brave Ads**
+Disable Brave Ads feature by enabling or disabling it.
 
-10.**Disable/Enable Sync**
-Toggle Brave's Sync functionality, which synchronizes your data across devices.
+9. **Disable Sync**
+Disable Brave's Sync functionality, which synchronizes your data across devices.
 
 # How to Run
 ## 1.Open PowerShell with administrator privileges
