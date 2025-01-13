@@ -22,7 +22,7 @@ SlimBrave is a powerful PowerShell script designed for Windows users to streamli
 5. **Disable Password Manager**  
    Brave's built-in password manager for website login credentials.
 
-6. **Disable/Enable Tor**  
+6. **Disable Tor**  
    Tor functionality for "anonymous" browsing.
 
 7. **Set DNS Over HTTPS Mode**  
