@@ -44,7 +44,9 @@ Toggle Brave's Sync functionality, which synchronizes your data across devices.
 ```ps1
 Set-ExecutionPolicy -ExecutionPolicy RemoteSigned
 ```
-## 3. Run SlimBrave command in PowerShell:
+## 3. Press A to accept
+
+## 4. Run SlimBrave command in PowerShell:
 
 ### SlimBrave (No GUI)
 ```ps1
