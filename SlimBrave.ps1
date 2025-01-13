@@ -74,7 +74,7 @@ $features = @(
     @{ Name = "Disable Brave AI Chat"; Key = "BraveAIChatEnabled" },
     @{ Name = "Disable Password Manager"; Key = "PasswordManagerEnabled" },
     @{ Name = "Disable Tor"; Key = "TorDisabled" },
-    @{ Name = "Disable/Enable Automatic HTTPS Upgrades"; Key = "HttpsUpgradesEnabled" },
+    @{ Name = "Disable Automatic HTTPS Upgrades"; Key = "HttpsUpgradesEnabled" },
     @{ Name = "Disable Brave Ads"; Key = "BraveAdsEnabled" },
     @{ Name = "Disable Sync"; Key = "SyncDisabled" }
 )
