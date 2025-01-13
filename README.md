@@ -52,6 +52,8 @@ Set-ExecutionPolicy -ExecutionPolicy RemoteSigned
 ```ps1
 iwr "https://raw.githubusercontent.com/ltx0101/SlimBrave/main/SlimBrave.ps1" -OutFile "SlimBrave.ps1"; .\SlimBrave.ps1
 ```
+# ⚠️ATTENTION⚠️
+Running this script resets the values to their default. YOU then choose what to remove and what to keep.
 ## Requirements
 
 - Windows 10/11
