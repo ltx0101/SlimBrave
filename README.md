@@ -37,14 +37,14 @@ Manage the Brave Ads feature by enabling or disabling it.
 10.**Disable/Enable Sync**
 Toggle Brave's Sync functionality, which synchronizes your data across devices.
 
-## How to Run
-# 1.Open PowerShell with administrator privileges
+# How to Run
+## 1.Open PowerShell with administrator privileges
 
-# 2.Run this command:
+## 2.Run this command:
 ```ps1
 Set-ExecutionPolicy -ExecutionPolicy RemoteSigned
 ```
-# 3. Run SlimBrave command in PowerShell:
+## 3. Run SlimBrave command in PowerShell:
 
 # SlimBrave (No GUI)
 ```ps1
