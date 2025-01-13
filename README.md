@@ -6,42 +6,33 @@
 
 SlimBrave is a powerful PowerShell script designed for Windows users to streamline their Brave Browser experience by toggling and configuring unwanted features. With SlimBrave, you can easily disable or enable various Brave functionalities, customize settings, and improve privacy.
 
-## Features
-•**Disable Brave Rewards:**
+## Features:
+1. **Disable Brave Rewards:**  
+   Disable Brave's reward system.
 
-    Disable Brave's reward system.
+2. **Disable Brave Wallet:**  
+   Disable Brave's Wallet feature for managing cryptocurrencies.
 
-•**Disable Brave Wallet:**
+3. **Disable Brave VPN:**  
+   Disable Brave's VPN feature for enhanced privacy.
 
-    Disable Brave's Wallet feature for managing cryptocurrencies.
+4. **Disable Brave AI Chat:**  
+   Disable Brave's integrated AI Chat feature.
 
-•**Disable Brave VPN:**
+5. **Disable Password Manager:**  
+   Disable Brave's built-in password manager for website login credentials.
 
-    Disable Brave's VPN feature for enhanced privacy.
+6. **Disable/Enable Tor:**  
+   Disable Tor functionality for anonymous browsing.
 
-•**Disable Brave AI Chat:**
+7. **Set DNS Over HTTPS Mode:**  
+   Set the DNS Over HTTPS mode (options include automatic or off) to ensure private browsing with secure DNS queries.
 
-    Disable Brave's integrated AI Chat feature.
+8. **Disable Brave Ads:**  
+   Disable Brave Ads feature by enabling or disabling it.
 
-•**Disable Password Manager:**
-
-    Disable Brave's built-in password manager for website login credentials.
-
-•**Disable/Enable Tor:**
-
-    Disable Tor functionality for anonymous browsing.
-
-•**Set DNS Over HTTPS Mode:**
-
-    Set the DNS Over HTTPS mode (options include automatic or off) to ensure private browsing with secure DNS queries.
-
-•**Disable Brave Ads:**
-
-    Disable Brave Ads feature by enabling or disabling it.
-
-•**Disable Sync:**
-
-    Disable Brave's Sync functionality, which synchronizes your data across devices.
+9. **Disable Sync:**  
+   Disable Brave's Sync functionality, which synchronizes your data across devices.
 
 # How to Run
 ## 1.Open PowerShell with administrator privileges
