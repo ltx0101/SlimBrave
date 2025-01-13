@@ -39,8 +39,8 @@ Toggle Brave's Sync functionality, which synchronizes your data across devices.
 
 # How to Run
 1.Open PowerShell with administrator privileges
+
 2.Run this command:
-### PowerShell
 ```ps1
 Set-ExecutionPolicy -ExecutionPolicy RemoteSigned
 ```
