@@ -7,32 +7,32 @@
 SlimBrave is a powerful PowerShell script designed for Windows users to streamline their Brave Browser experience by toggling and configuring unwanted features. With SlimBrave, you can easily disable or enable various Brave functionalities, customize settings, and improve privacy.
 
 ## Features:
-1. **Disable Brave Rewards:**  
-   Disable Brave's reward system.
+1. **Disable Brave Rewards**  
+   Brave's reward system.
 
-2. **Disable Brave Wallet:**  
-   Disable Brave's Wallet feature for managing cryptocurrencies.
+2. **Disable Brave Wallet**  
+   Brave's Wallet feature for managing cryptocurrencies.
 
-3. **Disable Brave VPN:**  
-   Disable Brave's VPN feature for enhanced privacy.
+3. **Disable Brave VPN**  
+   Brave's VPN feature for enhanced privacy.
 
-4. **Disable Brave AI Chat:**  
-   Disable Brave's integrated AI Chat feature.
+4. **Disable Brave AI Chat**  
+   Brave's integrated AI Chat feature.
 
-5. **Disable Password Manager:**  
-   Disable Brave's built-in password manager for website login credentials.
+5. **Disable Password Manager**  
+   Brave's built-in password manager for website login credentials.
 
-6. **Disable/Enable Tor:**  
-   Disable Tor functionality for anonymous browsing.
+6. **Disable/Enable Tor**  
+   Tor functionality for "anonymous" browsing.
 
-7. **Set DNS Over HTTPS Mode:**  
+7. **Set DNS Over HTTPS Mode**  
    Set the DNS Over HTTPS mode (options include automatic or off) to ensure private browsing with secure DNS queries.
 
-8. **Disable Brave Ads:**  
-   Disable Brave Ads feature by enabling or disabling it.
+8. **Disable Brave Ads**  
+   Brave Ads feature.
 
-9. **Disable Sync:**  
-   Disable Brave's Sync functionality, which synchronizes your data across devices.
+9. **Disable Sync**  
+   Sync functionality that which synchronizes your data across devices.
 
 # How to Run
 ## 1.Open PowerShell with administrator privileges
