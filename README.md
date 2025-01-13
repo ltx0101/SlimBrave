@@ -46,11 +46,11 @@ Set-ExecutionPolicy -ExecutionPolicy RemoteSigned
 ```
 ## 3. Run SlimBrave command in PowerShell:
 
-# SlimBrave (No GUI)
+### SlimBrave (No GUI)
 ```ps1
 iwr "https://raw.githubusercontent.com/ltx0101/SlimBrave/main/SlimBrave.ps1" -OutFile "SlimBrave.ps1"; .\SlimBrave.ps1
 ```
-# Slimbrave GUI (Experimental)
+### Slimbrave GUI (Experimental)
 ```ps1
 iwr "https://raw.githubusercontent.com/ltx0101/SlimBrave/main/GUI.ps1" -OutFile "GUI.ps1"; .\GUI.ps1
 ```
