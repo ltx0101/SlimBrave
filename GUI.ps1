@@ -3,7 +3,6 @@ Add-Type -AssemblyName System.Drawing
 
 # Check for administrative privileges
 if (-not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
-    Write-Output "This script requires administrative privileges. Please run as an administrator."
     Start-Process powershell -ArgumentList "-File `"$($MyInvocation.MyCommand.Path)`"" -Verb RunAs
     exit
 }
@@ -69,15 +68,15 @@ $form.StartPosition = "CenterScreen"
 
 # Add checkboxes for features
 $features = @(
-    @{ Name = "Disable/Enable Brave Rewards"; Key = "BraveRewardsDisabled" },
-    @{ Name = "Disable/Enable Brave Wallet"; Key = "BraveWalletDisabled" },
-    @{ Name = "Disable/Enable Brave VPN"; Key = "BraveVPNDisabled" },
-    @{ Name = "Disable/Enable Brave AI Chat"; Key = "BraveAIChatEnabled" },
-    @{ Name = "Disable/Enable Password Manager"; Key = "PasswordManagerEnabled" },
-    @{ Name = "Disable/Enable Tor"; Key = "TorDisabled" },
+    @{ Name = "Disable Brave Rewards"; Key = "BraveRewardsDisabled" },
+    @{ Name = "Disable Brave Wallet"; Key = "BraveWalletDisabled" },
+    @{ Name = "Disable Brave VPN"; Key = "BraveVPNDisabled" },
+    @{ Name = "Disable Brave AI Chat"; Key = "BraveAIChatEnabled" },
+    @{ Name = "Disable Password Manager"; Key = "PasswordManagerEnabled" },
+    @{ Name = "Disable Tor"; Key = "TorDisabled" },
     @{ Name = "Disable/Enable Automatic HTTPS Upgrades"; Key = "HttpsUpgradesEnabled" },
-    @{ Name = "Disable/Enable Brave Ads"; Key = "BraveAdsEnabled" },
-    @{ Name = "Disable/Enable Sync"; Key = "SyncDisabled" }
+    @{ Name = "Disable Brave Ads"; Key = "BraveAdsEnabled" },
+    @{ Name = "Disable Sync"; Key = "SyncDisabled" }
 )
 
 $y = 20
@@ -127,7 +126,7 @@ $saveButton.Add_Click({
         Set-DnsMode -dnsMode $dnsDropdown.SelectedItem
     }
 
-    [System.Windows.Forms.MessageBox]::Show("Settings have been saved.", "Success", [System.Windows.Forms.MessageBoxButtons]::OK, [System.Windows.Forms.MessageBoxIcon]::Information)
+    [System.Windows.Forms.MessageBox]::Show("Success! Restart Brave to see changes", "SlimBrave", [System.Windows.Forms.MessageBoxButtons]::OK, [System.Windows.Forms.MessageBoxIcon]::Information)
 })
 
 # Show the form
