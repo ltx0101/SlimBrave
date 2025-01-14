@@ -6,53 +6,47 @@
 
 SlimBrave is a powerful PowerShell script designed for Windows users to streamline their Brave Browser experience by toggling and configuring unwanted features. With SlimBrave, you can easily disable or enable various Brave functionalities, customize settings, and improve privacy.
 
+## Requirements
+- Windows 10/11
+- PowerShell
+- Administrator privileges
+
+## How to Run
+> [!CAUTION]
+> Running this script **resets** the values to their **default**. YOU then **choose** what to remove and what to keep.
+
+#### 1. Open PowerShell with administrator privileges
+
+#### 2. Run SlimBrave
+```ps1
+irm "https://raw.githubusercontent.com/ltx0101/SlimBrave/main/SlimBrave.ps1" | iex
+```
+> [!NOTE]
+> The Invoke-RestMethod (IRM) command in PowerShell is used to download a script from a specified URL, while the Invoke-Expression (IEX) command executes the downloaded script.
 ## Features:
 1. **Disable Brave Rewards**  
-   Brave's reward system.
+   Brave's rewards system that rewards tokens for viewing ads.
 
 2. **Disable Brave Wallet**  
    Brave's Wallet feature for managing cryptocurrencies.
 
 3. **Disable Brave VPN**  
-   Brave's VPN feature for enhanced privacy.
+   Brave's VPN service, which provides enhanced privacy.
 
 4. **Disable Brave AI Chat**  
-   Brave's integrated AI Chat feature.
+   Brave's AI-powered chat assistant integrated into the browser.
 
 5. **Disable Password Manager**  
-   Brave's built-in password manager for website login credentials.
+   Brave's built-in password manager for saving and autofilling login credentials.
 
 6. **Disable Tor**  
-   Tor functionality for "anonymous" browsing.
+   Brave's ability to browse using Tor for added anonymity.
 
 7. **Set DNS Over HTTPS Mode**  
-   Set the DNS Over HTTPS mode (options include automatic or off) to ensure private browsing with secure DNS queries.
+   Choose how DNS queries are handled for better security and privacy. Options: automatic/off.
 
 8. **Disable Brave Ads**  
-   Brave Ads feature.
+   Brave's private ad system for earning rewards.
 
 9. **Disable Sync**  
-   Sync functionality that which synchronizes your data across devices.
-
-# How to Run
-## 1.Open PowerShell with administrator privileges
-
-## 2.Run this command:
-```ps1
-Set-ExecutionPolicy -ExecutionPolicy RemoteSigned
-```
-## 3. Press A to accept
-
-## 4. Run SlimBrave command in PowerShell:
-
-### SlimBrave
-```ps1
-iwr "https://raw.githubusercontent.com/ltx0101/SlimBrave/main/SlimBrave.ps1" -OutFile "SlimBrave.ps1"; .\SlimBrave.ps1
-```
-# ⚠️ATTENTION⚠️
-Running this script resets the values to their default. YOU then choose what to remove and what to keep.
-## Requirements
-
-- Windows 10/11
-- PowerShell
-- Administrator privileges are required
+   Disable syncing bookmarks, passwords, and settings across your devices using Brave Sync.
