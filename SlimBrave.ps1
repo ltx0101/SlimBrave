@@ -62,7 +62,7 @@ function Set-DnsMode {
 
 # Create the form
 $form = New-Object System.Windows.Forms.Form
-$form.Text = "SlimBrave"
+$form.Text = "SlimBrave"
 $form.ForeColor = [System.Drawing.Color]::White
 $form.Size = New-Object System.Drawing.Size(400, 450)
 $form.StartPosition = "CenterScreen"
