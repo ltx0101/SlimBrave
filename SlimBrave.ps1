@@ -62,9 +62,14 @@ function Set-DnsMode {
 
 # Create the form
 $form = New-Object System.Windows.Forms.Form
-$form.Text = "Brave Browser Settings"
-$form.Size = New-Object System.Drawing.Size(400, 500)
+$form.Text = "SlimBrave"
+$form.ForeColor = [System.Drawing.Color]::White
+$form.Size = New-Object System.Drawing.Size(400, 450)
 $form.StartPosition = "CenterScreen"
+$form.BackColor = [System.Drawing.Color]::FromArgb(255, 25, 25, 25)
+$form.MaximizeBox = $false
+$form.FormBorderStyle = [System.Windows.Forms.FormBorderStyle]::FixedDialog
+
 
 # Add checkboxes for features
 $features = @(
@@ -112,6 +117,9 @@ $saveButton.Text = "Save Settings"
 $saveButton.Location = New-Object System.Drawing.Point(150, $y)
 $saveButton.Size = New-Object System.Drawing.Size(100, 30)
 $form.Controls.Add($saveButton)
+$saveButton.BackColor = [System.Drawing.Color]::FromArgb(150, 102, 102, 102)
+$saveButton.ForeColor = [System.Drawing.Color]::LightSalmon
+
 
 # Button click event
 $saveButton.Add_Click({
