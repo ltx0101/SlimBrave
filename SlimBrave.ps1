@@ -95,6 +95,7 @@ foreach ($feature in $features) {
     $checkbox.Tag = $feature.Key
     $checkbox.Location = New-Object System.Drawing.Point(20, $y)
     $checkbox.Size = New-Object System.Drawing.Size(350, 20)
+    $checkbox.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
     $form.Controls.Add($checkbox)
     $checkboxes[$feature.Key] = $checkbox
     $y += 30
@@ -111,6 +112,9 @@ $dnsDropdown = New-Object System.Windows.Forms.ComboBox
 $dnsDropdown.Location = New-Object System.Drawing.Point(170, $y)
 $dnsDropdown.Size = New-Object System.Drawing.Size(150, 20)
 $dnsDropdown.Items.AddRange(@("automatic", "off", "custom"))
+$dnsDropdown.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
+$dnsDropdown.BackColor = [System.Drawing.Color]::FromArgb(255, 25, 25, 25)
+$dnsDropdown.ForeColor = [System.Drawing.Color]::White
 $form.Controls.Add($dnsDropdown)
 $y += 40
 
@@ -120,6 +124,9 @@ $saveButton.Text = "Save Settings"
 $saveButton.Location = New-Object System.Drawing.Point(150, $y)
 $saveButton.Size = New-Object System.Drawing.Size(100, 30)
 $form.Controls.Add($saveButton)
+$saveButton.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
+$saveButton.FlatAppearance.BorderSize = 1
+$saveButton.FlatAppearance.BorderColor = [System.Drawing.Color]::FromArgb(120, 120, 120)
 $saveButton.BackColor = [System.Drawing.Color]::FromArgb(150, 102, 102, 102)
 $saveButton.ForeColor = [System.Drawing.Color]::LightSalmon
 
