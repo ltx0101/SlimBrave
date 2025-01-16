@@ -6,7 +6,8 @@ if (-not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdent
     Start-Process powershell -ArgumentList "-File `"$($MyInvocation.MyCommand.Path)`"" -Verb RunAs
     exit
 }
-$registryPath = "HKLM:\SOFTWARE\Policies\BraveSoftware\Brave\"
+
+$registryPath = "HKLM:\SOFTWARE\Policies\BraveSoftware\Brave"
 
 if (-not (Test-Path -Path $registryPath)) {
     New-Item -Path $registryPath -Force
@@ -25,14 +26,14 @@ $registryKeys = @{
 }
 
 foreach ($key in $registryKeys.Keys) {
-    $keyPath = "$registryPath\$key"
-    if (-not (Test-Path -Path $keyPath)) {
+    if (-not (Get-ItemProperty -Path $registryPath -Name $key -ErrorAction SilentlyContinue)) {
         New-ItemProperty -Path $registryPath -Name $key -Value $registryKeys[$key] -PropertyType DWord -Force
         Write-Host "Added registry key: $key with value $($registryKeys[$key])"
     } else {
         Write-Host "Registry key $key already exists."
     }
 }
+
 # Function to toggle a registry value
 function Toggle-Registry {
     param (
@@ -50,6 +51,13 @@ function Toggle-Registry {
     }
 }
 
+Clear-Host
+Write-Host ███████░██░░░░░░██░███░░░░███░██████░░██████░░░█████░░██░░░░██░███████
+Write-Host ██░░░░░░██░░░░░░██░████░░████░██░░░██░██░░░██░██░░░██░██░░░░██░██░░░░░
+Write-Host ███████░██░░░░░░██░██░████░██░██████░░██████░░███████░██░░░░██░█████░░
+Write-Host ░░░░░██░██░░░░░░██░██░░██░░██░██░░░██░██░░░██░██░░░██░░██░░██░░██░░░░░
+Write-Host ███████░███████░██░██░░░░░░██░██████░░██░░░██░██░░░██░░░████░░░███████
+
 # Function to set DNS mode
 function Set-DnsMode {
     param (
@@ -62,7 +70,7 @@ function Set-DnsMode {
 
 # Create the form
 $form = New-Object System.Windows.Forms.Form
-$form.Text = "SlimBrave"
+$form.Text = "SlimBrave"
 $form.ForeColor = [System.Drawing.Color]::White
 $form.Size = New-Object System.Drawing.Size(400, 450)
 $form.StartPosition = "CenterScreen"
