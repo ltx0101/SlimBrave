@@ -14,7 +14,7 @@ SlimBrave is a powerful PowerShell script designed for Windows users to streamli
    Brave's Wallet feature for managing cryptocurrencies.
 
 - **Disable Brave VPN**  
-   Brave's VPN feature for enhanced privacy.
+   Brave's VPN feature for "enhanced" privacy.
 
 - **Disable Brave AI Chat**  
    Brave's integrated AI Chat feature.
