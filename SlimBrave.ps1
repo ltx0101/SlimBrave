@@ -5,7 +5,7 @@ Add-Type -AssemblyName System.Drawing
 # Script information and manifest
 $scriptName = $MyInvocation.MyCommand.Name
 $version = "1.0"
-$author = "Your Name"
+$author = "SlimBrave"
 
 # Check for administrative privileges
 function Test-AdminPrivileges {
