@@ -1,5 +1,5 @@
 # SlimBrave
-![slimbravelogosmall](https://github.com/user-attachments/assets/3e90a996-a74a-4ca1-bea6-0869275bab58)
+<img src="https://github.com/user-attachments/assets/3e90a996-a74a-4ca1-bea6-0869275bab58" width="200" height="300">
 
 
 ## Brave Browser Debloater
