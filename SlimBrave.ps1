@@ -2,221 +2,149 @@ if (-not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdent
     Start-Process powershell -ArgumentList "-File `"$($MyInvocation.MyCommand.Path)`"" -Verb RunAs
     exit
 }
+
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
 
-$Host.UI.RawUI.ForegroundColor = "White"
-$Host.UI.RawUI.BackgroundColor = "Black"
+$registryPath = "HKLM:\SOFTWARE\Policies\BraveSoftware\Brave"
 
+if (-not (Test-Path -Path $registryPath)) {
+    New-Item -Path $registryPath -Force
+}
+
+$registryKeys = @{
+    "BraveRewardsDisabled" = 0
+    "BraveWalletDisabled" = 0
+    "BraveVPNDisabled" = 0
+    "BraveAIChatEnabled" = 1
+    "PasswordManagerEnabled" = 1
+    "TorDisabled" = 0
+    "DnsOverHttpsMode" = 2
+    "BraveAdsEnabled" = 1
+    "SyncDisabled" = 0
+}
+
+foreach ($key in $registryKeys.Keys) {
+    if (-not (Get-ItemProperty -Path $registryPath -Name $key -ErrorAction SilentlyContinue)) {
+        New-ItemProperty -Path $registryPath -Name $key -Value $registryKeys[$key] -PropertyType DWord -Force
+        Write-Host "Added registry key: $key with value $($registryKeys[$key])"
+    } else {
+        Write-Host "Registry key $key already exists."
+    }
+}
+
+# Function to toggle a registry value
+function Toggle-Registry {
+    param (
+        [string] $feature
+    )
+    $regKey = "HKLM:\\Software\\Policies\\BraveSoftware\\Brave"
+
+    # Check the current value of the feature
+    $currentValue = Get-ItemProperty -Path $regKey -Name $feature -ErrorAction SilentlyContinue
+
+    if ($currentValue.$feature -eq 1) {
+        Set-ItemProperty -Path $regKey -Name $feature -Value 0 -Force
+    } else {
+        Set-ItemProperty -Path $regKey -Name $feature -Value 1 -Force
+    }
+}
+
+Clear-Host
+
+# Function to set DNS mode
+function Set-DnsMode {
+    param (
+        [string] $dnsMode
+    )
+    $regKey = "HKLM:\\Software\\Policies\\BraveSoftware\\Brave"
+    Set-ItemProperty -Path $regKey -Name "DnsOverHttpsMode" -Value $dnsMode -Type String -Force
+    [System.Windows.Forms.MessageBox]::Show("DNS Over HTTPS Mode has been set to $dnsMode.", "Success", [System.Windows.Forms.MessageBoxButtons]::OK, [System.Windows.Forms.MessageBoxIcon]::Information)
+}
+
+# Create the form
 $form = New-Object System.Windows.Forms.Form
-$form.Text = "Stealth Chrome"
-$form.Size = New-Object System.Drawing.Size(400, 750)
+$form.Text = "SlimBrave"
 $form.ForeColor = [System.Drawing.Color]::White
-$form.BackColor = [System.Drawing.Color]::FromArgb(255, 25, 25, 25)
+$form.Size = New-Object System.Drawing.Size(400, 450)
 $form.StartPosition = "CenterScreen"
+$form.BackColor = [System.Drawing.Color]::FromArgb(255, 25, 25, 25)
 $form.MaximizeBox = $false
-$form.MinimizeBox = $false
 $form.FormBorderStyle = [System.Windows.Forms.FormBorderStyle]::FixedDialog
 
-$chromePoliciesPath = "HKLM:\SOFTWARE\Policies\Google\Chrome"
 
-#General Policies
-$generalPolicies = @{
-        "SyncDisabled" = 1
-        "SigninAllowed" = 0
-        "HardwareAccelerationModeEnabled" = 1
-        "NetworkPredictionOptions" = 0
-        "TabFreezingEnabled" = 0
-        "MemorySaverModeSavings" = 0
-        "ChromeCleanupEnabled" = 0
-        "PasswordLeakDetectionEnabled" = 0
-        "SafeBrowsingEnabled" = 0
-        "NTPContentSuggestionsEnabled" = 0
-        "SpellCheckServiceEnabled" = 0
-        "TranslateEnabled" = 0
-        "PasswordManagerEnabled" = 0
-        "AutofillEnabled" = 0
-        "AutofillCreditCardEnabled" = 0
-        "DefaultGeolocationSetting" = 0
-        "SensorsAllowedForUrls" = 0
-        "AudioCaptureAllowed" = 0
-        "VideoCaptureAllowed" = 0
-        "ScreenCaptureAllowed" = 0
-        "SearchSuggestEnabled" = 0
-        "ContextualSearchEnabled" = 0
-        "WebSQLAccess" = 0
-        "ClearBrowsingDataOnExitList" = 1
-        "DnsOverHttpsMode" = 1
-        "HttpsOnlyMode" = 1
-}
+# Add checkboxes for features
+$features = @(
+    @{ Name = "Disable Brave Rewards"; Key = "BraveRewardsDisabled" },
+    @{ Name = "Disable Brave Wallet"; Key = "BraveWalletDisabled" },
+    @{ Name = "Disable Brave VPN"; Key = "BraveVPNDisabled" },
+    @{ Name = "Disable Brave AI Chat"; Key = "BraveAIChatEnabled" },
+    @{ Name = "Disable Password Manager"; Key = "PasswordManagerEnabled" },
+    @{ Name = "Disable Tor"; Key = "TorDisabled" },
+    @{ Name = "Disable Automatic HTTPS Upgrades"; Key = "HttpsUpgradesEnabled" },
+    @{ Name = "Disable Brave Ads"; Key = "BraveAdsEnabled" },
+    @{ Name = "Disable Sync"; Key = "SyncDisabled" }
+)
 
-#Privacy Policies
-$privacyPolicies = @{
-        "MetricsReportingEnabled" = 0
-        "UrlKeyedAnonymizedDataCollectionEnabled" = 0
-        "CloudReportingEnabled" = 0
-        "ReportDeviceNetworkEvents" = 0
-        "BlockThirdPartyCookies" = 1
-        "PerformanceTracingManagerEnabled" = 0
-        "EnableDoNotTrack" = 1
-        "DeviceActivityHeartbeatEnabled" = 0
-        "DeviceExtensionsSystemLogEnabled" = 0
-        "DeviceFlexHwDataForProductImprovementEnabled" = 0
-        "DeviceMetricsReportingEnabled" = 0
-        "DeviceReportNetworkEvents" = 0
-        "DeviceReportRuntimeCounters" = 0
-        "DeviceReportXDREvents" = 0
-        "EnableDeviceGranularReporting" = 0
-        "HeartbeatEnabled" = 0
-        "HeartbeatFrequency" = 0
-        "LogUploadEnabled" = 0
-        "ReportAppInventory" = 0
-        "ReportAppUsage" = 0
-        "ReportArcStatusEnabled" = 0
-        "ReportCRDSessions" = 0
-        "ReportDeviceActivityTimes" = 0
-        "ReportDeviceAppInfo" = 0
-        "ReportDeviceAudioStatus" = 0
-        "ReportDeviceBacklightInfo" = 0
-        "ReportDeviceBluetoothInfo" = 0
-        "ReportDeviceBoardStatus" = 0
-        "ReportDeviceBootMode" = 0
-        "ReportDeviceCpuInfo" = 0
-        "ReportDeviceCrashReportInfo" = 0
-        "ReportDeviceFanInfo" = 0
-        "ReportDeviceGraphicsStatus" = 0
-        "ReportDeviceHardwareStatus" = 0
-        "ReportDeviceLoginLogout" = 0
-        "ReportDeviceMemoryInfo" = 0
-        "ReportDeviceNetworkConfiguration" = 0
-        "ReportDeviceNetworkInterfaces" = 0
-        "ReportDeviceNetworkStatus" = 0
-        "ReportDeviceOsUpdateStatus" = 0
-        "ReportDevicePeripherals" = 0
-        "ReportDevicePowerStatus" = 0
-        "ReportDevicePrintJobs" = 0
-        "ReportDeviceSecurityStatus" = 0
-        "ReportDeviceSessionStatus" = 0
-        "ReportDeviceStorageStatus" = 0
-        "ReportDeviceSystemInfo" = 0
-        "ReportDeviceTimezoneInfo" = 0
-        "ReportDeviceUsers" = 0
-        "ReportDeviceVersionInfo" = 0
-        "ReportDeviceVpdInfo" = 0
-        "ReportUploadFrequency" = 0
-        "ReportWebsiteActivityAllowlist" = 0
-        "ReportWebsiteTelemetry" = 0
-        "ReportWebsiteTelemetryAllowlist" = 0
-        "SafeBrowsingExtendedReportingEnabled" = 0
-        "SafeBrowsingSurveysEnabled" = 0
-        "WebRtcEventLogCollectionAllowed" = 0
-        "PrivacySandboxAdMeasurementEnabled" = 0
-        "PrivacySandboxAdTopicsEnabled" = 0
-        "PrivacySandboxPromptEnabled" = 0
-        "PrivacySandboxSiteEnabledAdsEnabled" = 0
-}
-
-#Panel for General Policies with ScrollBar
-$scrollPanel = New-Object System.Windows.Forms.Panel
-$scrollPanel.Size = New-Object System.Drawing.Size(350, 480)
-$scrollPanel.Location = New-Object System.Drawing.Point(35, 20)
-$scrollPanel.AutoScroll = $true
-
-#GroupBox for General Policies
-$generalGroup = New-Object System.Windows.Forms.GroupBox
-$generalGroup.Text = "General Policies"
-$generalGroup.ForeColor = [System.Drawing.Color]::White
-$generalGroup.Size = New-Object System.Drawing.Size(300, 820)
-$generalGroup.Location = New-Object System.Drawing.Point(0, 0)
-$generalGroup.Font = New-Object System.Drawing.Font("Segoe UI Emoji", 12, [System.Drawing.FontStyle]::Regular)
-
-$generalCheckboxes = @()
-$y = 30
-foreach ($policy in $generalPolicies.Keys) {
+$y = 20
+$checkboxes = @{}
+foreach ($feature in $features) {
     $checkbox = New-Object System.Windows.Forms.CheckBox
-    $checkbox.Text = $policy
-    $checkbox.Size = New-Object System.Drawing.Size(250, 30)
+    $checkbox.Text = $feature.Name
+    $checkbox.Tag = $feature.Key
     $checkbox.Location = New-Object System.Drawing.Point(20, $y)
-    $checkbox.Font = New-Object System.Drawing.Font("Segoe UI Emoji", 10, [System.Drawing.FontStyle]::Regular)
+    $checkbox.Size = New-Object System.Drawing.Size(350, 20)
     $checkbox.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
-    $generalGroup.Controls.Add($checkbox)
-    $generalCheckboxes += $checkbox
+    $form.Controls.Add($checkbox)
+    $checkboxes[$feature.Key] = $checkbox
     $y += 30
 }
 
-$scrollPanel.Controls.Add($generalGroup)
+# Add DNS mode dropdown
+$dnsLabel = New-Object System.Windows.Forms.Label
+$dnsLabel.Text = "DNS Over HTTPS Mode:"
+$dnsLabel.Location = New-Object System.Drawing.Point(20, $y)
+$dnsLabel.Size = New-Object System.Drawing.Size(150, 20)
+$form.Controls.Add($dnsLabel)
 
-#GroupBox for Privacy Policies
-$privacyGroup = New-Object System.Windows.Forms.GroupBox
-$privacyGroup.Text = "Privacy Settings"
-$privacyGroup.ForeColor = [System.Drawing.Color]::White
-$privacyGroup.Size = New-Object System.Drawing.Size(350, 80)
-$privacyGroup.Location = New-Object System.Drawing.Point(20, 550)
-$privacyGroup.Font = New-Object System.Drawing.Font("Segoe UI Emoji", 12, [System.Drawing.FontStyle]::Regular)
+$dnsDropdown = New-Object System.Windows.Forms.ComboBox
+$dnsDropdown.Location = New-Object System.Drawing.Point(170, $y)
+$dnsDropdown.Size = New-Object System.Drawing.Size(150, 20)
+$dnsDropdown.Items.AddRange(@("automatic", "off", "custom"))
+$dnsDropdown.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
+$dnsDropdown.BackColor = [System.Drawing.Color]::FromArgb(255, 25, 25, 25)
+$dnsDropdown.ForeColor = [System.Drawing.Color]::White
+$form.Controls.Add($dnsDropdown)
+$y += 40
 
-$privacyCheckboxes = @()
-$privacyCheckbox = New-Object System.Windows.Forms.CheckBox
-$privacyCheckbox.Text = "Enable All Privacy Settings"
-$privacyCheckbox.Size = New-Object System.Drawing.Size(300, 30)
-$privacyCheckbox.Location = New-Object System.Drawing.Point(20, 30)
-$privacyCheckbox.Font = New-Object System.Drawing.Font("Segoe UI Emoji", 10, [System.Drawing.FontStyle]::Regular)
-$privacyCheckbox.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
-$privacyGroup.Controls.Add($privacyCheckbox)
-$privacyCheckboxes += $privacyCheckbox
+# Add Save button
+$saveButton = New-Object System.Windows.Forms.Button
+$saveButton.Text = "Save Settings"
+$saveButton.Location = New-Object System.Drawing.Point(150, $y)
+$saveButton.Size = New-Object System.Drawing.Size(100, 30)
+$form.Controls.Add($saveButton)
+$saveButton.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
+$saveButton.FlatAppearance.BorderSize = 1
+$saveButton.FlatAppearance.BorderColor = [System.Drawing.Color]::FromArgb(120, 120, 120)
+$saveButton.BackColor = [System.Drawing.Color]::FromArgb(150, 102, 102, 102)
+$saveButton.ForeColor = [System.Drawing.Color]::LightSalmon
 
-# Apply Button for Selected Policies
-$applyButton = New-Object System.Windows.Forms.Button
-$applyButton.Text = "Apply Selected Policies"
-$applyButton.Location = New-Object System.Drawing.Point(40, 650)
-$applyButton.Size = New-Object System.Drawing.Size(140, 40)
-$applyButton.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
-$applyButton.FlatAppearance.BorderColor = [System.Drawing.Color]::Black
-$applyButton.FlatAppearance.BorderSize = 1
-$applyButton.Font = New-Object System.Drawing.Font("Segoe UI Emoji", 9, [System.Drawing.FontStyle]::Regular)
-$applyButton.Add_Click({
-    if (!(Test-Path $chromePoliciesPath)) { New-Item -Path $chromePoliciesPath -Force | Out-Null }
+
+# Button click event
+$saveButton.Add_Click({
+    foreach ($key in $checkboxes.Keys) {
+        $checkbox = $checkboxes[$key]
+        if ($checkbox.Checked) {
+            Toggle-Registry -feature $key
+        }
+    }
     
-    $selectedGeneralPolicies = $generalCheckboxes | Where-Object { $_.Checked } | ForEach-Object { $_.Text }
-    if ($selectedGeneralPolicies.Count -eq 0) {
-        [System.Windows.Forms.MessageBox]::Show("No general policies selected.", "Warning")
-    } else {
-        foreach ($policy in $selectedGeneralPolicies) {
-            Set-ItemProperty -Path $chromePoliciesPath -Name $policy -Value $generalPolicies[$policy] -Force
-        }
-        [System.Windows.Forms.MessageBox]::Show("General policies applied successfully!", "Success")
+    if ($dnsDropdown.SelectedItem) {
+        Set-DnsMode -dnsMode $dnsDropdown.SelectedItem
     }
 
-    if ($privacyCheckbox.Checked) {
-        foreach ($policy in $privacyPolicies.Keys) {
-            Set-ItemProperty -Path $chromePoliciesPath -Name $policy -Value $privacyPolicies[$policy] -Force
-        }
-        [System.Windows.Forms.MessageBox]::Show("Privacy policies applied successfully!", "Success")
-    } else {
-        [System.Windows.Forms.MessageBox]::Show("No privacy policies selected.", "Warning")
-    }
+    [System.Windows.Forms.MessageBox]::Show("Success! Restart Brave to see changes", "SlimBrave", [System.Windows.Forms.MessageBoxButtons]::OK, [System.Windows.Forms.MessageBoxIcon]::Information)
 })
 
-# Reset Button
-$resetButton = New-Object System.Windows.Forms.Button
-$resetButton.Text = "Reset to Default"
-$resetButton.Location = New-Object System.Drawing.Point(210, 650)
-$resetButton.Size = New-Object System.Drawing.Size(140, 40)
-$resetButton.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
-$resetButton.FlatAppearance.BorderColor = [System.Drawing.Color]::Black
-$resetButton.FlatAppearance.BorderSize = 1
-$resetButton.Font = New-Object System.Drawing.Font("Segoe UI Emoji", 9, [System.Drawing.FontStyle]::Regular)
-$resetButton.Add_Click({
-    if (Test-Path $chromePoliciesPath) {
-        Remove-Item -Path $chromePoliciesPath -Recurse -Force
-        [System.Windows.Forms.MessageBox]::Show("Chrome policies reset to default!", "Success")
-    } else {
-        [System.Windows.Forms.MessageBox]::Show("No policies to reset.", "Info")
-    }
-})
-
-$form.Controls.Add($scrollPanel)
-$form.Controls.Add($privacyGroup)
-$form.Controls.Add($applyButton)
-$form.Controls.Add($resetButton)
-
-$form.ShowDialog()
+# Show the form
+[void] $form.ShowDialog()
