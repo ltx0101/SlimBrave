@@ -28,9 +28,6 @@ SlimBrave is a powerful PowerShell script designed for Windows users to streamli
 - **Set DNS Over HTTPS Mode**  
    Set the DNS Over HTTPS mode (options include automatic or off) to ensure private browsing with secure DNS queries.
 
-- **Disable Brave Ads**  
-   Brave Ads feature.
-
 - **Disable Sync**  
    Sync functionality that which synchronizes your data across devices.
 
