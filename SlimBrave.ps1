@@ -20,7 +20,6 @@ $registryKeys = @{
     "PasswordManagerEnabled" = 1
     "TorDisabled" = 0
     "DnsOverHttpsMode" = 2
-    "BraveAdsEnabled" = 1
     "SyncDisabled" = 0
 }
 
@@ -82,7 +81,6 @@ $features = @(
     @{ Name = "Disable Password Manager"; Key = "PasswordManagerEnabled" },
     @{ Name = "Disable Tor"; Key = "TorDisabled" },
     @{ Name = "Disable Automatic HTTPS Upgrades"; Key = "HttpsUpgradesEnabled" },
-    @{ Name = "Disable Brave Ads"; Key = "BraveAdsEnabled" },
     @{ Name = "Disable Sync"; Key = "SyncDisabled" }
 )
 
