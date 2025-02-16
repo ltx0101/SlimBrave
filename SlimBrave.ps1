@@ -13,15 +13,15 @@ if (-not (Test-Path -Path $registryPath)) {
 }
 
 $registryKeys = @{
-    "BraveRewardsDisabled" = 0
-    "BraveWalletDisabled" = 0
-    "BraveVPNDisabled" = 0
-    "BraveAIChatEnabled" = 1
-    "PasswordManagerEnabled" = 1
-    "TorDisabled" = 0
+    "BraveRewardsDisabled" = 1
+    "BraveWalletDisabled" = 1
+    "BraveVPNDisabled" = 1
+    "BraveAIChatEnabled" = 0
+    "PasswordManagerEnabled" = 0
+    "TorDisabled" = 1
     "DnsOverHttpsMode" = 2
-    "BraveAdsEnabled" = 1
-    "SyncDisabled" = 0
+    "BraveAdsEnabled" = 0
+    "SyncDisabled" = 1
 }
 
 foreach ($key in $registryKeys.Keys) {
