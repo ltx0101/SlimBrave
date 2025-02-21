@@ -1,13 +1,10 @@
-# Load required assemblies
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
 
-# Script information and manifest
 $scriptName = $MyInvocation.MyCommand.Name
 $version = "1.0"
 $author = "SlimBrave"
 
-# Check for administrative privileges
 function Test-AdminPrivileges {
     [CmdletBinding()]
     param ()
@@ -20,7 +17,6 @@ function Test-AdminPrivileges {
 
 Test-AdminPrivileges
 
-# Registry constants and settings
 $registryPath = "HKLM:\SOFTWARE\Policies\BraveSoftware\Brave"
 
 function Initialize-RegistrySettings {
@@ -47,7 +43,6 @@ $defaultSettings = @{
     SyncDisabled                       = 0
 }
 
-# Function to get current registry value
 function Get-RegistryValue {
     [CmdletBinding()]
     param (
@@ -61,7 +56,6 @@ function Get-RegistryValue {
     }
 }
 
-# Function to set registry value
 function Set-RegistryValue {
     [CmdletBinding()]
     param (
@@ -83,7 +77,6 @@ function Set-RegistryValue {
     }
 }
 
-# Function to toggle a registry value
 function Toggle-Registry {
     [CmdletBinding()]
     param (
@@ -103,7 +96,6 @@ function Toggle-Registry {
     }
 }
 
-# Function to set DNS mode
 function Set-DnsMode {
     [CmdletBinding()]
     param (
@@ -119,12 +111,10 @@ function Set-DnsMode {
     }
 }
 
-# Function to create and initialize the form
 function Initialize-GUI {
     [CmdletBinding()]
     param ()
 
-    # Create main form
     $form = New-Object System.Windows.Forms.Form
     $form.Text = "SlimBrave v$version"
     $form.ForeColor = [System.Drawing.Color]::White
@@ -134,12 +124,10 @@ function Initialize-GUI {
     $form.MaximizeBox = $false
     $form.FormBorderStyle = [System.Windows.Forms.FormBorderStyle]::FixedDialog
 
-    # Create controls container for better layout management
     $controlsContainer = New-Object System.Windows.Forms.TableLayoutPanel
     $controlsContainer.Dock = [System.Windows.Forms.DockStyle]::Fill
     $form.Controls.Add($controlsContainer)
 
-    # Define form elements and layout
     $currentY = 0
     $checkboxes = @{}
     $features = @(
@@ -164,7 +152,6 @@ function Initialize-GUI {
         $checkbox.UseVisualStyleBackColor = $false
         $checkbox.BackColor = [System.Drawing.Color]::FromArgb(192, 192, 192)
         
-        # Set initial state based on current value
         if ($currentValue = Get-RegistryValue -key $feature.Key) {
             $checkbox.Checked = ($currentValue.Value -eq 1)
         } else {
@@ -176,7 +163,6 @@ function Initialize-GUI {
         $currentY += 30
     }
 
-    # DNS mode controls
     $dnsGroupLabel = New-Object System.Windows.Forms.Label
     $dnsGroupLabel.Text = "DNS Over HTTPS Mode:"
     $dnsGroupLabel.Location = New-Object System.Drawing.Point(20, $currentY)
@@ -194,7 +180,6 @@ function Initialize-GUI {
     $dnsDropdown.BackColor = [System.Drawing.Color]::FromArgb(255, 25, 25, 25)
     $dnsDropdown.ForeColor = [System.Drawing.Color]::White
 
-    # Save button configuration
     $saveButton = New-Object System.Windows.Forms.Button
     $saveButton.Text = "Save Settings"
     $saveButton.Location = New-Object System.Drawing.Point(150, $currentY + 40)
@@ -221,16 +206,13 @@ function Initialize-GUI {
         [System.Windows.Forms.MessageBox]::Show("Success! Restart Brave to see changes", "SlimBrave", [System.Windows.Forms.MessageBoxButtons]::OK, [System.Windows.Forms.MessageBoxIcon]::Information)
     })
 
-    # Add all controls to the form
     $form.Controls.Add($dnsGroupLabel)
     $form.Controls.Add($dnsDropdown)
     $form.Controls.Add($saveButton)
 
-    # Show the form
     [void] $form.ShowDialog()
 }
 
-# Run the GUI initializer when script is executed
 if ($MyInvocation.ScriptName -eq $scriptName) {
     Initialize-GUI
 }
