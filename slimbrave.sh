@@ -1,11 +1,9 @@
 #!/bin/bash
-
 scriptName="SlimBrave"
 version="1.0"
-author="SlimBrave"
 
 if [ "$(id -u)" -ne 0 ]; then
-    echo "This script requires root privileges. Please run with sudo."
+    echo "This script requires root privileges."
     exit 1
 fi
 
@@ -24,23 +22,65 @@ declare -A defaultSettings=(
     ["SyncDisabled"]=false
 )
 
-get_pref_value() {
-    local key=$1
-    jq -r ".${key}" "$prefs_file"
-}
+# Constants for menu options and actions
+declare -A menuItems=(
+    [1]="Toggle Brave Rewards"
+    [2]="Toggle Brave Wallet"
+    [3]="Toggle Brave VPN"
+    [4]="Toggle Brave AI Chat"
+    [5]="Toggle Password Manager"
+    [6]="Toggle Tor"
+    [7]="Toggle Brave Ads"
+    [8]="Toggle Sync"
+    [9]="Set DNS Over HTTPS Mode"
+)
 
-set_pref_value() {
-    local key=$1
-    local value=$2
-    jq ".${key} = ${value}" "$prefs_file" > "$prefs_file.tmp" && mv "$prefs_file.tmp" "$prefs_file"
-}
-
-toggle_setting() {
-    local key=$1
-    local current_value
-    current_value=$(get_pref_value "$key")
+show_menu() {
+    echo "========================="
+    echo " SlimBrave v$version"
+    echo "========================="
     
-    if [ "$current_value" == "true" ]; then
+    printf "Menu:\n"
+    for i in "${!menuItems[@]}"; do
+        echo -e "\n${menuItems[$i]}: ${i}"
+    done
+    
+    echo "10) Exit"
+    echo "========================="
+}
+
+get_pref_value key file="prefs_file" {
+    local result
+    while read -r line; do
+        if [[ $line == *"${key}*"]]; then
+            result=$line
+            break
+        fi
+    done || result=false
+    echo "$result"
+}
+
+set_pref_value key value file="prefs_file" {
+    local cmd
+    declare -x newFile="$file.tmp"
+    
+    if ! jq --auto-conv -r ".${key} = ${value}" "$file" > "$newFile"; then
+        echo "Failed to set preference."
+        exit 1
+    fi
+    
+    mv "$newFile" "$file"
+}
+
+toggle_setting key {
+    local current_value=$(get_pref_value "$key")
+    
+    if [ -z "$current_value" ]; then
+        echo "Current value not found. Using default."
+        current_value="${defaultSettings[$key]}"
+    fi
+    
+    if [ $(($current_value == "true")) -eq 1 ]; then
         set_pref_value "$key" "false"
         echo "Disabled $key"
     else
@@ -49,70 +89,38 @@ toggle_setting() {
     fi
 }
 
-set_dns_mode() {
-    local dns_mode=$1
-    jq ".DnsOverHttpsMode = \"$dns_mode\"" "$prefs_file" > "$prefs_file.tmp" && mv "$prefs_file.tmp" "$prefs_file"
-    echo "Set DNS Over HTTPS Mode to $dns_mode"
+set_dns_mode mode {
+    local cmd="DnsOverHttpsMode=\"$mode\""
+    
+    if ! jq -r "$cmd" "$prefs_file" > "$prefs_file.tmp"; then
+        echo "Failed to set DNS mode."
+        exit 1
+    fi
+    
+    mv "$prefs_file.tmp" "$prefs_file"
+    echo "Set DNS Over HTTPS Mode to $mode"
 }
 
-show_menu() {
-    echo "========================="
-    echo " SlimBrave v$version"
-    echo "========================="
-    echo "Select an option:"
-    echo "1) Toggle Brave Rewards"
-    echo "2) Toggle Brave Wallet"
-    echo "3) Toggle Brave VPN"
-    echo "4) Toggle Brave AI Chat"
-    echo "5) Toggle Password Manager"
-    echo "6) Toggle Tor"
-    echo "7) Toggle Brave Ads"
-    echo "8) Toggle Sync"
-    echo "9) Set DNS Over HTTPS Mode"
-    echo "10) Exit"
-    echo "========================="
+main() {
+    while true; do
+        show_menu
+        read -p "Enter your choice (1-10): " choice
+        
+        case $choice in
+            10)
+                echo "Exiting SlimBrave script."
+                exit 0
+                ;;
+            $((10#${menuItems[$i]}))
+                if ! $current_action=$(toggle_setting "$i"); then
+                    continue
+                fi
+                ;;
+            *) 
+                echo "Invalid choice, please try again."
+                ;;
+        esac
+    done
 }
 
-while true; do
-    show_menu
-    read -p "Enter your choice (1-10): " choice
-
-    case $choice in
-        1)
-            toggle_setting "BraveRewardsDisabled"
-            ;;
-        2)
-            toggle_setting "BraveWalletDisabled"
-            ;;
-        3)
-            toggle_setting "BraveVPNDisabled"
-            ;;
-        4)
-            toggle_setting "BraveAIChatEnabled"
-            ;;
-        5)
-            toggle_setting "PasswordManagerEnabled"
-            ;;
-        6)
-            toggle_setting "TorDisabled"
-            ;;
-        7)
-            toggle_setting "BraveAdsEnabled"
-            ;;
-        8)
-            toggle_setting "SyncDisabled"
-            ;;
-        9)
-            echo "Choose DNS Over HTTPS Mode (automatic, off, custom):"
-            read dns_choice
-            set_dns_mode "$dns_choice"
-            ;;
-        10)
-            echo "Exiting SlimBrave script."
-            exit 0
-            ;;
-        *)
-            echo "Invalid choice, please try again."
-            ;;
-    esac
-done
+main
