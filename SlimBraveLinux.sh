@@ -27,8 +27,6 @@ echo "Do you want to disable DNS over HTTPS? (y/n)"
 read -r DISABLE_DOH
 echo "Do you want to enable Brave AI Chat? (y/n)"
 read -r ENABLE_AI_CHAT
-echo "Do you want to enable Brave Ads? (y/n)"
-read -r ENABLE_ADS
 echo "Do you want to enable Password Manager? (y/n)"
 read -r ENABLE_PASSWORD_MANAGER
 
@@ -40,7 +38,6 @@ jq ".extensions.\"brave-rewards\".enabled = $( [ "$DISABLE_REWARDS" = "y" ] && e
     .password_manager.enabled = $( [ "$ENABLE_PASSWORD_MANAGER" = "y" ] && echo "true" || echo "false" ) |
     .extensions.\"tor-browser\".enabled = $( [ "$DISABLE_TOR" = "y" ] && echo "false" || echo "true" ) |
     .dns_over_https.mode = $( [ "$DISABLE_DOH" = "y" ] && echo "\"off\"" || echo "\"automatic\"" ) |
-    .features.\"brave-features\".ads-enabled = $( [ "$ENABLE_ADS" = "y" ] && echo "true" || echo "false" ) |
     .sync.enabled = $( [ "$DISABLE_SYNC" = "y" ] && echo "false" || echo "true" )" "$PREFS_PATH" > "$PREFS_PATH.tmp" && mv "$PREFS_PATH.tmp" "$PREFS_PATH"
 
 # Set correct permissions
