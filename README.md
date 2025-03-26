@@ -64,8 +64,6 @@ iwr "https://raw.githubusercontent.com/ltx0101/SlimBrave/main/SlimBrave.ps1" -Ou
 - Administrator privileges
 </details>
 
----
-
 <details>
 <summary>Error "Running Scripts is Disabled on this System"</summary>
 
@@ -75,3 +73,33 @@ iwr "https://raw.githubusercontent.com/ltx0101/SlimBrave/main/SlimBrave.ps1" -Ou
 Set-ExecutionPolicy -ExecutionPolicy RemoteSigned
 ```
 </details>
+<div align="center">
+  
+---
+
+🌟 **Like this project? Give it a star!** 🌟  
+💻  **Want to contribute? PRs are welcome!** 💻 
+
+</div>
+
+### Why SlimBrave Matters
+
+In an era of increasingly bloated browsers, SlimBrave puts **you** back in control:
+- 🚀 **Faster browsing** by removing unnecessary features
+- 🛡️ **Enhanced privacy** through granular controls
+- ⚙️ **Transparent customization** without hidden settings
+
+---
+
+### Future Roadmap
+- [ ] Add preset configurations (Privacy, Performance, etc.)
+- [ ] Create backup/restore functionality
+- [ ] Add support for Linux/Mac (WIP)
+
+---
+
+<div align="center">
+  
+Made with ❤️ and PowerShell  
+
+</div>
