@@ -14,7 +14,7 @@ SlimBrave is a powerful PowerShell script designed for Windows users to streamli
 - **Disable Brave Rewards**  
    Brave's reward system.
 
--  **Disable Brave Wallet**  
+- **Disable Brave Wallet**  
    Brave's Wallet feature for managing cryptocurrencies.
 
 - **Disable Brave VPN**  
@@ -33,14 +33,22 @@ SlimBrave is a powerful PowerShell script designed for Windows users to streamli
    Set the DNS Over HTTPS mode (options include automatic or off) to ensure private browsing with secure DNS queries.
 
 - **Disable Sync**  
-   Sync functionality that which synchronizes your data across devices.
+   Sync functionality that synchronizes your data across devices.
 
+- **Telemetry & Reporting Controls**  
+   Disable metrics reporting, safe browsing reporting, and data collection.
 
+- **Privacy & Security Options**  
+   Manage autofill, WebRTC, QUIC protocol, and more.
 
+- **Performance Optimization**  
+   Disable background processes and unnecessary features.
+
+- **Reset All Settings**  
+   One-click removal of all modified Brave policy settings (with confirmation).
 ---
 
 # How to Run
-
 
 ### Run the command below in PowerShell:
 
@@ -57,8 +65,6 @@ iwr "https://raw.githubusercontent.com/ltx0101/SlimBrave/main/SlimBrave.ps1" -Ou
 </details>
 
 ---
-> [!IMPORTANT]
-Running this script resets the values to their default. YOU then choose what to remove and what to keep.
 
 <details>
 <summary>Error "Running Scripts is Disabled on this System"</summary>
