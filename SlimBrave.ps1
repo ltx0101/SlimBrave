@@ -12,46 +12,8 @@ if (-not (Test-Path -Path $registryPath)) {
     New-Item -Path $registryPath -Force
 }
 
-$registryKeys = @{
-    "BraveRewardsDisabled" = 0
-    "BraveWalletDisabled" = 0
-    "BraveVPNDisabled" = 0
-    "BraveAIChatEnabled" = 1
-    "PasswordManagerEnabled" = 1
-    "TorDisabled" = 0
-    "DnsOverHttpsMode" = 2
-    "SyncDisabled" = 0
-}
-
-foreach ($key in $registryKeys.Keys) {
-    if (-not (Get-ItemProperty -Path $registryPath -Name $key -ErrorAction SilentlyContinue)) {
-        New-ItemProperty -Path $registryPath -Name $key -Value $registryKeys[$key] -PropertyType DWord -Force
-        Write-Host "Added registry key: $key with value $($registryKeys[$key])"
-    } else {
-        Write-Host "Registry key $key already exists."
-    }
-}
-
-# Function to toggle a registry value
-function Toggle-Registry {
-    param (
-        [string] $feature
-    )
-    $regKey = "HKLM:\\Software\\Policies\\BraveSoftware\\Brave"
-
-    # Check the current value of the feature
-    $currentValue = Get-ItemProperty -Path $regKey -Name $feature -ErrorAction SilentlyContinue
-
-    if ($currentValue.$feature -eq 1) {
-        Set-ItemProperty -Path $regKey -Name $feature -Value 0 -Force
-    } else {
-        Set-ItemProperty -Path $regKey -Name $feature -Value 1 -Force
-    }
-}
-
 Clear-Host
 
-# Function to set DNS mode
 function Set-DnsMode {
     param (
         [string] $dnsMode
@@ -61,44 +23,145 @@ function Set-DnsMode {
     [System.Windows.Forms.MessageBox]::Show("DNS Over HTTPS Mode has been set to $dnsMode.", "Success", [System.Windows.Forms.MessageBoxButtons]::OK, [System.Windows.Forms.MessageBoxIcon]::Information)
 }
 
-# Create the form
 $form = New-Object System.Windows.Forms.Form
 $form.Text = "SlimBrave"
 $form.ForeColor = [System.Drawing.Color]::White
-$form.Size = New-Object System.Drawing.Size(400, 450)
+$form.Size = New-Object System.Drawing.Size(370, 890)
 $form.StartPosition = "CenterScreen"
 $form.BackColor = [System.Drawing.Color]::FromArgb(255, 25, 25, 25)
 $form.MaximizeBox = $false
 $form.FormBorderStyle = [System.Windows.Forms.FormBorderStyle]::FixedDialog
 
+$allFeatures = @()
 
-# Add checkboxes for features
-$features = @(
-    @{ Name = "Disable Brave Rewards"; Key = "BraveRewardsDisabled" },
-    @{ Name = "Disable Brave Wallet"; Key = "BraveWalletDisabled" },
-    @{ Name = "Disable Brave VPN"; Key = "BraveVPNDisabled" },
-    @{ Name = "Disable Brave AI Chat"; Key = "BraveAIChatEnabled" },
-    @{ Name = "Disable Password Manager"; Key = "PasswordManagerEnabled" },
-    @{ Name = "Disable Tor"; Key = "TorDisabled" },
-    @{ Name = "Disable Automatic HTTPS Upgrades"; Key = "HttpsUpgradesEnabled" },
-    @{ Name = "Disable Sync"; Key = "SyncDisabled" }
+$telemetryLabel = New-Object System.Windows.Forms.Label
+$telemetryLabel.Text = "Telemetry & Reporting:"
+$telemetryLabel.Font = New-Object System.Drawing.Font("Microsoft Sans Serif", 9, [System.Drawing.FontStyle]::Bold)
+$telemetryLabel.Location = New-Object System.Drawing.Point(20, 20)
+$telemetryLabel.Size = New-Object System.Drawing.Size(400, 20)
+$telemetryLabel.ForeColor = [System.Drawing.Color]::LightSalmon
+$form.Controls.Add($telemetryLabel)
+
+$telemetryFeatures = @(
+    @{ Name = "Disable Metrics Reporting"; Key = "MetricsReportingEnabled"; Value = 0; Type = "DWord" },
+    @{ Name = "Disable Safe Browsing Reporting"; Key = "SafeBrowsingExtendedReportingEnabled"; Value = 0; Type = "DWord" },
+    @{ Name = "Disable URL Data Collection"; Key = "UrlKeyedAnonymizedDataCollectionEnabled"; Value = 0; Type = "DWord" },
+    @{ Name = "Disable Feedback Surveys"; Key = "FeedbackSurveysEnabled"; Value = 0; Type = "DWord" }
 )
 
-$y = 20
-$checkboxes = @{}
-foreach ($feature in $features) {
+$y = 45
+foreach ($feature in $telemetryFeatures) {
     $checkbox = New-Object System.Windows.Forms.CheckBox
     $checkbox.Text = $feature.Name
-    $checkbox.Tag = $feature.Key
-    $checkbox.Location = New-Object System.Drawing.Point(20, $y)
-    $checkbox.Size = New-Object System.Drawing.Size(350, 20)
+    $checkbox.Tag = $feature
+    $checkbox.Location = New-Object System.Drawing.Point(30, $y)
+    $checkbox.Size = New-Object System.Drawing.Size(380, 20)
     $checkbox.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
     $form.Controls.Add($checkbox)
-    $checkboxes[$feature.Key] = $checkbox
-    $y += 30
+    $allFeatures += $checkbox
+    $y += 25
 }
 
-# Add DNS mode dropdown
+$y += 10
+
+$privacyLabel = New-Object System.Windows.Forms.Label
+$privacyLabel.Text = "Privacy & Security:"
+$privacyLabel.Font = New-Object System.Drawing.Font("Microsoft Sans Serif", 9, [System.Drawing.FontStyle]::Bold)
+$privacyLabel.Location = New-Object System.Drawing.Point(20, $y)
+$privacyLabel.Size = New-Object System.Drawing.Size(400, 20)
+$privacyLabel.ForeColor = [System.Drawing.Color]::LightSalmon
+$form.Controls.Add($privacyLabel)
+$y += 25
+
+$privacyFeatures = @(
+    @{ Name = "Disable Safe Browsing"; Key = "SafeBrowsingProtectionLevel"; Value = 0; Type = "DWord" },
+    @{ Name = "Disable Autofill (Addresses)"; Key = "AutofillAddressEnabled"; Value = 0; Type = "DWord" },
+    @{ Name = "Disable Autofill (Credit Cards)"; Key = "AutofillCreditCardEnabled"; Value = 0; Type = "DWord" },
+    @{ Name = "Disable Password Manager"; Key = "PasswordManagerEnabled"; Value = 0; Type = "DWord" },
+    @{ Name = "Disable WebRTC IP Leak"; Key = "WebRtcIPHandling"; Value = "disable_non_proxied_udp"; Type = "String" },
+    @{ Name = "Disable QUIC Protocol"; Key = "QuicAllowed"; Value = 0; Type = "DWord" },
+    @{ Name = "Block Third Party Cookies"; Key = "BlockThirdPartyCookies"; Value = 1; Type = "DWord" }
+)
+
+foreach ($feature in $privacyFeatures) {
+    $checkbox = New-Object System.Windows.Forms.CheckBox
+    $checkbox.Text = $feature.Name
+    $checkbox.Tag = $feature
+    $checkbox.Location = New-Object System.Drawing.Point(30, $y)
+    $checkbox.Size = New-Object System.Drawing.Size(380, 20)
+    $checkbox.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
+    $form.Controls.Add($checkbox)
+    $allFeatures += $checkbox
+    $y += 25
+}
+
+$y += 10
+
+$braveLabel = New-Object System.Windows.Forms.Label
+$braveLabel.Text = "Brave Features:"
+$braveLabel.Font = New-Object System.Drawing.Font("Microsoft Sans Serif", 9, [System.Drawing.FontStyle]::Bold)
+$braveLabel.Location = New-Object System.Drawing.Point(20, $y)
+$braveLabel.Size = New-Object System.Drawing.Size(400, 20)
+$braveLabel.ForeColor = [System.Drawing.Color]::LightSalmon
+$form.Controls.Add($braveLabel)
+$y += 25
+
+$braveFeatures = @(
+    @{ Name = "Disable Brave Rewards"; Key = "BraveRewardsDisabled"; Value = 1; Type = "DWord" },
+    @{ Name = "Disable Brave Wallet"; Key = "BraveWalletDisabled"; Value = 1; Type = "DWord" },
+    @{ Name = "Disable Brave VPN"; Key = "BraveVPNDisabled"; Value = 1; Type = "DWord" },
+    @{ Name = "Disable Brave AI Chat"; Key = "BraveAIChatEnabled"; Value = 0; Type = "DWord" },
+    @{ Name = "Disable Tor"; Key = "TorDisabled"; Value = 1; Type = "DWord" },
+    @{ Name = "Disable Sync"; Key = "SyncDisabled"; Value = 1; Type = "DWord" }
+)
+
+foreach ($feature in $braveFeatures) {
+    $checkbox = New-Object System.Windows.Forms.CheckBox
+    $checkbox.Text = $feature.Name
+    $checkbox.Tag = $feature
+    $checkbox.Location = New-Object System.Drawing.Point(30, $y)
+    $checkbox.Size = New-Object System.Drawing.Size(380, 20)
+    $checkbox.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
+    $form.Controls.Add($checkbox)
+    $allFeatures += $checkbox
+    $y += 25
+}
+
+$y += 10
+
+$perfLabel = New-Object System.Windows.Forms.Label
+$perfLabel.Text = "Performance & Bloat:"
+$perfLabel.Font = New-Object System.Drawing.Font("Microsoft Sans Serif", 9, [System.Drawing.FontStyle]::Bold)
+$perfLabel.Location = New-Object System.Drawing.Point(20, $y)
+$perfLabel.Size = New-Object System.Drawing.Size(400, 20)
+$perfLabel.ForeColor = [System.Drawing.Color]::LightSalmon
+$form.Controls.Add($perfLabel)
+$y += 25
+
+$perfFeatures = @(
+    @{ Name = "Disable Background Mode"; Key = "BackgroundModeEnabled"; Value = 0; Type = "DWord" },
+    @{ Name = "Disable Media Recommendations"; Key = "MediaRecommendationsEnabled"; Value = 0; Type = "DWord" },
+    @{ Name = "Disable Shopping List"; Key = "ShoppingListEnabled"; Value = 0; Type = "DWord" },
+    @{ Name = "Disable Translate"; Key = "TranslateEnabled"; Value = 0; Type = "DWord" },
+    @{ Name = "Disable Spell Check Service"; Key = "SpellCheckServiceEnabled"; Value = 0; Type = "DWord" },
+    @{ Name = "Disable Promotions"; Key = "PromotionsEnabled"; Value = 0; Type = "DWord" },
+    @{ Name = "Disable Search Suggestions"; Key = "SearchSuggestEnabled"; Value = 0; Type = "DWord" }
+)
+
+foreach ($feature in $perfFeatures) {
+    $checkbox = New-Object System.Windows.Forms.CheckBox
+    $checkbox.Text = $feature.Name
+    $checkbox.Tag = $feature
+    $checkbox.Location = New-Object System.Drawing.Point(30, $y)
+    $checkbox.Size = New-Object System.Drawing.Size(380, 20)
+    $checkbox.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
+    $form.Controls.Add($checkbox)
+    $allFeatures += $checkbox
+    $y += 25
+}
+
+$y += 20
+
 $dnsLabel = New-Object System.Windows.Forms.Label
 $dnsLabel.Text = "DNS Over HTTPS Mode:"
 $dnsLabel.Location = New-Object System.Drawing.Point(20, $y)
@@ -115,11 +178,10 @@ $dnsDropdown.ForeColor = [System.Drawing.Color]::White
 $form.Controls.Add($dnsDropdown)
 $y += 40
 
-# Add Save button
 $saveButton = New-Object System.Windows.Forms.Button
-$saveButton.Text = "Save Settings"
-$saveButton.Location = New-Object System.Drawing.Point(150, $y)
-$saveButton.Size = New-Object System.Drawing.Size(100, 30)
+$saveButton.Text = "Apply Settings"
+$saveButton.Location = New-Object System.Drawing.Point(30, $y)
+$saveButton.Size = New-Object System.Drawing.Size(120, 30)
 $form.Controls.Add($saveButton)
 $saveButton.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
 $saveButton.FlatAppearance.BorderSize = 1
@@ -127,13 +189,16 @@ $saveButton.FlatAppearance.BorderColor = [System.Drawing.Color]::FromArgb(120, 1
 $saveButton.BackColor = [System.Drawing.Color]::FromArgb(150, 102, 102, 102)
 $saveButton.ForeColor = [System.Drawing.Color]::LightSalmon
 
-
-# Button click event
 $saveButton.Add_Click({
-    foreach ($key in $checkboxes.Keys) {
-        $checkbox = $checkboxes[$key]
+    foreach ($checkbox in $allFeatures) {
         if ($checkbox.Checked) {
-            Toggle-Registry -feature $key
+            $feature = $checkbox.Tag
+            try {
+                Set-ItemProperty -Path $registryPath -Name $feature.Key -Value $feature.Value -Type $feature.Type -Force
+                Write-Host "Set $($feature.Key) to $($feature.Value)"
+            } catch {
+                Write-Host "Failed to set $($feature.Key): $_"
+            }
         }
     }
     
@@ -141,8 +206,61 @@ $saveButton.Add_Click({
         Set-DnsMode -dnsMode $dnsDropdown.SelectedItem
     }
 
-    [System.Windows.Forms.MessageBox]::Show("Success! Restart Brave to see changes", "SlimBrave", [System.Windows.Forms.MessageBoxButtons]::OK, [System.Windows.Forms.MessageBoxIcon]::Information)
+    [System.Windows.Forms.MessageBox]::Show("Settings applied successfully! Restart Brave to see changes.", "SlimBrave", [System.Windows.Forms.MessageBoxButtons]::OK, [System.Windows.Forms.MessageBoxIcon]::Information)
 })
 
-# Show the form
+function Reset-AllSettings {
+    $confirm = [System.Windows.Forms.MessageBox]::Show(
+        "Warning: This will erase ALL Brave policy settings and restore them to their default state. Do you wish to continue?", 
+        "Confirm SlimBrave Reset", 
+        [System.Windows.Forms.MessageBoxButtons]::YesNo, 
+        [System.Windows.Forms.MessageBoxIcon]::Warning
+    )
+    
+    if ($confirm -eq "Yes") {
+        try {
+            Remove-Item -Path $registryPath -Recurse -Force
+            New-Item -Path $registryPath -Force | Out-Null
+
+            [System.Windows.Forms.MessageBox]::Show(
+                "All Brave policy settings have been successfully reset to their default values.", 
+                "Reset Successful", 
+                [System.Windows.Forms.MessageBoxButtons]::OK, 
+                [System.Windows.Forms.MessageBoxIcon]::Information
+            )
+            return $true
+        } catch {
+            [System.Windows.Forms.MessageBox]::Show(
+                "An error occurred while resetting the settings: $_", 
+                "Reset Failed", 
+                [System.Windows.Forms.MessageBoxButtons]::OK, 
+                [System.Windows.Forms.MessageBoxIcon]::Error
+            )
+            return $false
+        }
+    }
+
+    return $false
+}
+
+$resetButton = New-Object System.Windows.Forms.Button
+$resetButton.Text = "Reset All Settings"
+$resetButton.Location = New-Object System.Drawing.Point(205, $y)
+$resetButton.Size = New-Object System.Drawing.Size(120, 30)
+$form.Controls.Add($resetButton)
+$resetButton.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
+$resetButton.FlatAppearance.BorderSize = 1
+$resetButton.FlatAppearance.BorderColor = [System.Drawing.Color]::FromArgb(120, 120, 120)
+$resetButton.BackColor = [System.Drawing.Color]::FromArgb(150, 102, 102, 102)
+$resetButton.ForeColor = [System.Drawing.Color]::LightCoral
+$y += 40
+
+$resetButton.Add_Click({
+    if (Reset-AllSettings) {
+        if (-not (Test-Path -Path $registryPath)) {
+            New-Item -Path $registryPath -Force | Out-Null
+        }
+    }
+})
+
 [void] $form.ShowDialog()
