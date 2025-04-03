@@ -26,7 +26,7 @@ function Set-DnsMode {
 $form = New-Object System.Windows.Forms.Form
 $form.Text = "SlimBrave"
 $form.ForeColor = [System.Drawing.Color]::White
-$form.Size = New-Object System.Drawing.Size(370, 890)
+$form.Size = New-Object System.Drawing.Size(755, 570)
 $form.StartPosition = "CenterScreen"
 $form.BackColor = [System.Drawing.Color]::FromArgb(255, 25, 25, 25)
 $form.MaximizeBox = $false
@@ -34,13 +34,20 @@ $form.FormBorderStyle = [System.Windows.Forms.FormBorderStyle]::FixedDialog
 
 $allFeatures = @()
 
+$leftPanel = New-Object System.Windows.Forms.Panel
+$leftPanel.Location = New-Object System.Drawing.Point(20, 20)
+$leftPanel.Size = New-Object System.Drawing.Size(340,440)
+$leftPanel.BackColor = [System.Drawing.Color]::FromArgb(255, 35, 35, 35)
+$leftPanel.BorderStyle = [System.Windows.Forms.BorderStyle]::FixedSingle
+$form.Controls.Add($leftPanel)
+
 $telemetryLabel = New-Object System.Windows.Forms.Label
 $telemetryLabel.Text = "Telemetry & Reporting:"
 $telemetryLabel.Font = New-Object System.Drawing.Font("Microsoft Sans Serif", 9, [System.Drawing.FontStyle]::Bold)
 $telemetryLabel.Location = New-Object System.Drawing.Point(20, 20)
-$telemetryLabel.Size = New-Object System.Drawing.Size(400, 20)
+$telemetryLabel.Size = New-Object System.Drawing.Size(300, 20)
 $telemetryLabel.ForeColor = [System.Drawing.Color]::LightSalmon
-$form.Controls.Add($telemetryLabel)
+$leftPanel.Controls.Add($telemetryLabel)
 
 $telemetryFeatures = @(
     @{ Name = "Disable Metrics Reporting"; Key = "MetricsReportingEnabled"; Value = 0; Type = "DWord" },
@@ -55,9 +62,9 @@ foreach ($feature in $telemetryFeatures) {
     $checkbox.Text = $feature.Name
     $checkbox.Tag = $feature
     $checkbox.Location = New-Object System.Drawing.Point(30, $y)
-    $checkbox.Size = New-Object System.Drawing.Size(380, 20)
+    $checkbox.Size = New-Object System.Drawing.Size(300, 20)
     $checkbox.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
-    $form.Controls.Add($checkbox)
+    $leftPanel.Controls.Add($checkbox)
     $allFeatures += $checkbox
     $y += 25
 }
@@ -68,9 +75,9 @@ $privacyLabel = New-Object System.Windows.Forms.Label
 $privacyLabel.Text = "Privacy & Security:"
 $privacyLabel.Font = New-Object System.Drawing.Font("Microsoft Sans Serif", 9, [System.Drawing.FontStyle]::Bold)
 $privacyLabel.Location = New-Object System.Drawing.Point(20, $y)
-$privacyLabel.Size = New-Object System.Drawing.Size(400, 20)
+$privacyLabel.Size = New-Object System.Drawing.Size(300, 20)
 $privacyLabel.ForeColor = [System.Drawing.Color]::LightSalmon
-$form.Controls.Add($privacyLabel)
+$leftPanel.Controls.Add($privacyLabel)
 $y += 25
 
 $privacyFeatures = @(
@@ -88,22 +95,29 @@ foreach ($feature in $privacyFeatures) {
     $checkbox.Text = $feature.Name
     $checkbox.Tag = $feature
     $checkbox.Location = New-Object System.Drawing.Point(30, $y)
-    $checkbox.Size = New-Object System.Drawing.Size(380, 20)
+    $checkbox.Size = New-Object System.Drawing.Size(300, 20)
     $checkbox.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
-    $form.Controls.Add($checkbox)
+    $leftPanel.Controls.Add($checkbox)
     $allFeatures += $checkbox
     $y += 25
 }
 
-$y += 10
+$rightPanel = New-Object System.Windows.Forms.Panel
+$rightPanel.Location = New-Object System.Drawing.Point(380, 20)
+$rightPanel.Size = New-Object System.Drawing.Size(340, 440)
+$rightPanel.BackColor = [System.Drawing.Color]::FromArgb(255, 35, 35, 35)
+$rightPanel.BorderStyle = [System.Windows.Forms.BorderStyle]::FixedSingle
+$form.Controls.Add($rightPanel)
+
+$y = 20
 
 $braveLabel = New-Object System.Windows.Forms.Label
 $braveLabel.Text = "Brave Features:"
 $braveLabel.Font = New-Object System.Drawing.Font("Microsoft Sans Serif", 9, [System.Drawing.FontStyle]::Bold)
 $braveLabel.Location = New-Object System.Drawing.Point(20, $y)
-$braveLabel.Size = New-Object System.Drawing.Size(400, 20)
+$braveLabel.Size = New-Object System.Drawing.Size(300, 20)
 $braveLabel.ForeColor = [System.Drawing.Color]::LightSalmon
-$form.Controls.Add($braveLabel)
+$rightPanel.Controls.Add($braveLabel)
 $y += 25
 
 $braveFeatures = @(
@@ -120,9 +134,9 @@ foreach ($feature in $braveFeatures) {
     $checkbox.Text = $feature.Name
     $checkbox.Tag = $feature
     $checkbox.Location = New-Object System.Drawing.Point(30, $y)
-    $checkbox.Size = New-Object System.Drawing.Size(380, 20)
+    $checkbox.Size = New-Object System.Drawing.Size(300, 20)
     $checkbox.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
-    $form.Controls.Add($checkbox)
+    $rightPanel.Controls.Add($checkbox)
     $allFeatures += $checkbox
     $y += 25
 }
@@ -133,9 +147,9 @@ $perfLabel = New-Object System.Windows.Forms.Label
 $perfLabel.Text = "Performance & Bloat:"
 $perfLabel.Font = New-Object System.Drawing.Font("Microsoft Sans Serif", 9, [System.Drawing.FontStyle]::Bold)
 $perfLabel.Location = New-Object System.Drawing.Point(20, $y)
-$perfLabel.Size = New-Object System.Drawing.Size(400, 20)
+$perfLabel.Size = New-Object System.Drawing.Size(300, 20)
 $perfLabel.ForeColor = [System.Drawing.Color]::LightSalmon
-$form.Controls.Add($perfLabel)
+$rightPanel.Controls.Add($perfLabel)
 $y += 25
 
 $perfFeatures = @(
@@ -153,23 +167,23 @@ foreach ($feature in $perfFeatures) {
     $checkbox.Text = $feature.Name
     $checkbox.Tag = $feature
     $checkbox.Location = New-Object System.Drawing.Point(30, $y)
-    $checkbox.Size = New-Object System.Drawing.Size(380, 20)
+    $checkbox.Size = New-Object System.Drawing.Size(300, 20)
     $checkbox.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
-    $form.Controls.Add($checkbox)
+    $rightPanel.Controls.Add($checkbox)
     $allFeatures += $checkbox
     $y += 25
 }
 
-$y += 20
+$y = 780
 
 $dnsLabel = New-Object System.Windows.Forms.Label
 $dnsLabel.Text = "DNS Over HTTPS Mode:"
-$dnsLabel.Location = New-Object System.Drawing.Point(20, $y)
+$dnsLabel.Location = New-Object System.Drawing.Point(20, 495)
 $dnsLabel.Size = New-Object System.Drawing.Size(150, 20)
 $form.Controls.Add($dnsLabel)
 
 $dnsDropdown = New-Object System.Windows.Forms.ComboBox
-$dnsDropdown.Location = New-Object System.Drawing.Point(170, $y)
+$dnsDropdown.Location = New-Object System.Drawing.Point(170,490)
 $dnsDropdown.Size = New-Object System.Drawing.Size(150, 20)
 $dnsDropdown.Items.AddRange(@("automatic", "off", "custom"))
 $dnsDropdown.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
@@ -180,7 +194,7 @@ $y += 40
 
 $saveButton = New-Object System.Windows.Forms.Button
 $saveButton.Text = "Apply Settings"
-$saveButton.Location = New-Object System.Drawing.Point(30, $y)
+$saveButton.Location = New-Object System.Drawing.Point(400,480)
 $saveButton.Size = New-Object System.Drawing.Size(120, 30)
 $form.Controls.Add($saveButton)
 $saveButton.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
@@ -245,7 +259,7 @@ function Reset-AllSettings {
 
 $resetButton = New-Object System.Windows.Forms.Button
 $resetButton.Text = "Reset All Settings"
-$resetButton.Location = New-Object System.Drawing.Point(205, $y)
+$resetButton.Location = New-Object System.Drawing.Point(580,480)
 $resetButton.Size = New-Object System.Drawing.Size(120, 30)
 $form.Controls.Add($resetButton)
 $resetButton.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
