@@ -26,7 +26,7 @@ function Set-DnsMode {
 $form = New-Object System.Windows.Forms.Form
 $form.Text = "SlimBrave"
 $form.ForeColor = [System.Drawing.Color]::White
-$form.Size = New-Object System.Drawing.Size(755, 570)
+$form.Size = New-Object System.Drawing.Size(755, 670)
 $form.StartPosition = "CenterScreen"
 $form.BackColor = [System.Drawing.Color]::FromArgb(255, 25, 25, 25)
 $form.MaximizeBox = $false
@@ -36,15 +36,15 @@ $allFeatures = @()
 
 $leftPanel = New-Object System.Windows.Forms.Panel
 $leftPanel.Location = New-Object System.Drawing.Point(20, 20)
-$leftPanel.Size = New-Object System.Drawing.Size(340,440)
+$leftPanel.Size = New-Object System.Drawing.Size(340,500)
 $leftPanel.BackColor = [System.Drawing.Color]::FromArgb(255, 35, 35, 35)
 $leftPanel.BorderStyle = [System.Windows.Forms.BorderStyle]::FixedSingle
 $form.Controls.Add($leftPanel)
 
 $telemetryLabel = New-Object System.Windows.Forms.Label
-$telemetryLabel.Text = "Telemetry & Reporting:"
-$telemetryLabel.Font = New-Object System.Drawing.Font("Microsoft Sans Serif", 9, [System.Drawing.FontStyle]::Bold)
-$telemetryLabel.Location = New-Object System.Drawing.Point(20, 20)
+$telemetryLabel.Text = "Telemetry & Reporting"
+$telemetryLabel.Font = New-Object System.Drawing.Font("Microsoft Sans Serif", 10.5, [System.Drawing.FontStyle]::Bold)
+$telemetryLabel.Location = New-Object System.Drawing.Point(28, 10)
 $telemetryLabel.Size = New-Object System.Drawing.Size(300, 20)
 $telemetryLabel.ForeColor = [System.Drawing.Color]::LightSalmon
 $leftPanel.Controls.Add($telemetryLabel)
@@ -56,7 +56,7 @@ $telemetryFeatures = @(
     @{ Name = "Disable Feedback Surveys"; Key = "FeedbackSurveysEnabled"; Value = 0; Type = "DWord" }
 )
 
-$y = 45
+$y = 35
 foreach ($feature in $telemetryFeatures) {
     $checkbox = New-Object System.Windows.Forms.CheckBox
     $checkbox.Text = $feature.Name
@@ -72,9 +72,9 @@ foreach ($feature in $telemetryFeatures) {
 $y += 10
 
 $privacyLabel = New-Object System.Windows.Forms.Label
-$privacyLabel.Text = "Privacy & Security:"
-$privacyLabel.Font = New-Object System.Drawing.Font("Microsoft Sans Serif", 9, [System.Drawing.FontStyle]::Bold)
-$privacyLabel.Location = New-Object System.Drawing.Point(20, $y)
+$privacyLabel.Text = "Privacy & Security"
+$privacyLabel.Font = New-Object System.Drawing.Font("Microsoft Sans Serif", 11, [System.Drawing.FontStyle]::Bold)
+$privacyLabel.Location = New-Object System.Drawing.Point(28, $y)
 $privacyLabel.Size = New-Object System.Drawing.Size(300, 20)
 $privacyLabel.ForeColor = [System.Drawing.Color]::LightSalmon
 $leftPanel.Controls.Add($privacyLabel)
@@ -85,9 +85,15 @@ $privacyFeatures = @(
     @{ Name = "Disable Autofill (Addresses)"; Key = "AutofillAddressEnabled"; Value = 0; Type = "DWord" },
     @{ Name = "Disable Autofill (Credit Cards)"; Key = "AutofillCreditCardEnabled"; Value = 0; Type = "DWord" },
     @{ Name = "Disable Password Manager"; Key = "PasswordManagerEnabled"; Value = 0; Type = "DWord" },
+    @{ Name = "Disable Browser Sign-in"; Key = "BrowserSignin"; Value = 0; Type = "DWord" },
     @{ Name = "Disable WebRTC IP Leak"; Key = "WebRtcIPHandling"; Value = "disable_non_proxied_udp"; Type = "String" },
     @{ Name = "Disable QUIC Protocol"; Key = "QuicAllowed"; Value = 0; Type = "DWord" },
-    @{ Name = "Block Third Party Cookies"; Key = "BlockThirdPartyCookies"; Value = 1; Type = "DWord" }
+    @{ Name = "Block Third Party Cookies"; Key = "BlockThirdPartyCookies"; Value = 1; Type = "DWord" },
+    @{ Name = "Enable Do Not Track"; Key = "EnableDoNotTrack"; Value = 1; Type = "DWord" },
+    @{ Name = "Force Google SafeSearch"; Key = "ForceGoogleSafeSearch"; Value = 1; Type = "DWord" },
+    @{ Name = "Disable IPFS"; Key = "IPFSEnabled"; Value = 0; Type = "DWord" },
+    @{ Name = "Disable Incognito Mode"; Key = "IncognitoModeAvailability"; Value = 1; Type = "DWord" },
+    @{ Name = "Force Incognito Mode"; Key = "IncognitoModeAvailability"; Value = 2; Type = "DWord" }
 )
 
 foreach ($feature in $privacyFeatures) {
@@ -104,17 +110,17 @@ foreach ($feature in $privacyFeatures) {
 
 $rightPanel = New-Object System.Windows.Forms.Panel
 $rightPanel.Location = New-Object System.Drawing.Point(380, 20)
-$rightPanel.Size = New-Object System.Drawing.Size(340, 440)
+$rightPanel.Size = New-Object System.Drawing.Size(340, 540)
 $rightPanel.BackColor = [System.Drawing.Color]::FromArgb(255, 35, 35, 35)
 $rightPanel.BorderStyle = [System.Windows.Forms.BorderStyle]::FixedSingle
 $form.Controls.Add($rightPanel)
 
-$y = 20
+$y = 5
 
 $braveLabel = New-Object System.Windows.Forms.Label
-$braveLabel.Text = "Brave Features:"
-$braveLabel.Font = New-Object System.Drawing.Font("Microsoft Sans Serif", 9, [System.Drawing.FontStyle]::Bold)
-$braveLabel.Location = New-Object System.Drawing.Point(20, $y)
+$braveLabel.Text = "Brave Features"
+$braveLabel.Font = New-Object System.Drawing.Font("Microsoft Sans Serif", 11, [System.Drawing.FontStyle]::Bold)
+$braveLabel.Location = New-Object System.Drawing.Point(28, $y)
 $braveLabel.Size = New-Object System.Drawing.Size(300, 20)
 $braveLabel.ForeColor = [System.Drawing.Color]::LightSalmon
 $rightPanel.Controls.Add($braveLabel)
@@ -125,8 +131,10 @@ $braveFeatures = @(
     @{ Name = "Disable Brave Wallet"; Key = "BraveWalletDisabled"; Value = 1; Type = "DWord" },
     @{ Name = "Disable Brave VPN"; Key = "BraveVPNDisabled"; Value = 1; Type = "DWord" },
     @{ Name = "Disable Brave AI Chat"; Key = "BraveAIChatEnabled"; Value = 0; Type = "DWord" },
+    @{ Name = "Disable Brave Shields"; Key = "BraveShieldsDisabledForUrls"; Value = '["https://*", "http://*"]'; Type = "String" },
     @{ Name = "Disable Tor"; Key = "TorDisabled"; Value = 1; Type = "DWord" },
     @{ Name = "Disable Sync"; Key = "SyncDisabled"; Value = 1; Type = "DWord" }
+    
 )
 
 foreach ($feature in $braveFeatures) {
@@ -144,9 +152,9 @@ foreach ($feature in $braveFeatures) {
 $y += 10
 
 $perfLabel = New-Object System.Windows.Forms.Label
-$perfLabel.Text = "Performance & Bloat:"
-$perfLabel.Font = New-Object System.Drawing.Font("Microsoft Sans Serif", 9, [System.Drawing.FontStyle]::Bold)
-$perfLabel.Location = New-Object System.Drawing.Point(20, $y)
+$perfLabel.Text = "Performance & Bloat"
+$perfLabel.Font = New-Object System.Drawing.Font("Microsoft Sans Serif", 11, [System.Drawing.FontStyle]::Bold)
+$perfLabel.Location = New-Object System.Drawing.Point(28, $y)
 $perfLabel.Size = New-Object System.Drawing.Size(300, 20)
 $perfLabel.ForeColor = [System.Drawing.Color]::LightSalmon
 $rightPanel.Controls.Add($perfLabel)
@@ -156,10 +164,14 @@ $perfFeatures = @(
     @{ Name = "Disable Background Mode"; Key = "BackgroundModeEnabled"; Value = 0; Type = "DWord" },
     @{ Name = "Disable Media Recommendations"; Key = "MediaRecommendationsEnabled"; Value = 0; Type = "DWord" },
     @{ Name = "Disable Shopping List"; Key = "ShoppingListEnabled"; Value = 0; Type = "DWord" },
+    @{ Name = "Always Open PDF Externally"; Key = "AlwaysOpenPdfExternally"; Value = 1; Type = "DWord" },
     @{ Name = "Disable Translate"; Key = "TranslateEnabled"; Value = 0; Type = "DWord" },
-    @{ Name = "Disable Spell Check Service"; Key = "SpellCheckServiceEnabled"; Value = 0; Type = "DWord" },
+    @{ Name = "Disable Spellcheck"; Key = "SpellcheckEnabled"; Value = 0; Type = "DWord" },
     @{ Name = "Disable Promotions"; Key = "PromotionsEnabled"; Value = 0; Type = "DWord" },
-    @{ Name = "Disable Search Suggestions"; Key = "SearchSuggestEnabled"; Value = 0; Type = "DWord" }
+    @{ Name = "Disable Search Suggestions"; Key = "SearchSuggestEnabled"; Value = 0; Type = "DWord" },
+    @{ Name = "Disable Printing"; Key = "PrintingEnabled"; Value = 0; Type = "DWord" },
+    @{ Name = "Disable Default Browser Prompt"; Key = "DefaultBrowserSettingEnabled"; Value = 0; Type = "DWord" },
+    @{ Name = "Disable Developer Tools"; Key = "DeveloperToolsDisabled"; Value = 1; Type = "DWord" }
 )
 
 foreach ($feature in $perfFeatures) {
@@ -178,12 +190,12 @@ $y = 780
 
 $dnsLabel = New-Object System.Windows.Forms.Label
 $dnsLabel.Text = "DNS Over HTTPS Mode:"
-$dnsLabel.Location = New-Object System.Drawing.Point(20, 495)
-$dnsLabel.Size = New-Object System.Drawing.Size(150, 20)
+$dnsLabel.Location = New-Object System.Drawing.Point(35, 535)
+$dnsLabel.Size = New-Object System.Drawing.Size(140, 20)
 $form.Controls.Add($dnsLabel)
 
 $dnsDropdown = New-Object System.Windows.Forms.ComboBox
-$dnsDropdown.Location = New-Object System.Drawing.Point(170,490)
+$dnsDropdown.Location = New-Object System.Drawing.Point(180,530)
 $dnsDropdown.Size = New-Object System.Drawing.Size(150, 20)
 $dnsDropdown.Items.AddRange(@("automatic", "off", "custom"))
 $dnsDropdown.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
@@ -192,16 +204,38 @@ $dnsDropdown.ForeColor = [System.Drawing.Color]::White
 $form.Controls.Add($dnsDropdown)
 $y += 40
 
+$exportButton = New-Object System.Windows.Forms.Button
+$exportButton.Text = "Export Settings"
+$exportButton.Location = New-Object System.Drawing.Point(50, 580)
+$exportButton.Size = New-Object System.Drawing.Size(120, 30)
+$form.Controls.Add($exportButton)
+$exportButton.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
+$exportButton.FlatAppearance.BorderSize = 1
+$exportButton.FlatAppearance.BorderColor = [System.Drawing.Color]::FromArgb(120, 120, 120)
+$exportButton.BackColor = [System.Drawing.Color]::FromArgb(150, 102, 102, 102)
+$exportButton.ForeColor = [System.Drawing.Color]::LightSalmon
+
+$importButton = New-Object System.Windows.Forms.Button
+$importButton.Text = "Import Settings"
+$importButton.Location = New-Object System.Drawing.Point(210, 580)
+$importButton.Size = New-Object System.Drawing.Size(120, 30)
+$form.Controls.Add($importButton)
+$importButton.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
+$importButton.FlatAppearance.BorderSize = 1
+$importButton.FlatAppearance.BorderColor = [System.Drawing.Color]::FromArgb(120, 120, 120)
+$importButton.BackColor = [System.Drawing.Color]::FromArgb(150, 102, 102, 102)
+$importButton.ForeColor = [System.Drawing.Color]::LightSkyBlue
+
 $saveButton = New-Object System.Windows.Forms.Button
 $saveButton.Text = "Apply Settings"
-$saveButton.Location = New-Object System.Drawing.Point(400,480)
+$saveButton.Location = New-Object System.Drawing.Point(410,580)
 $saveButton.Size = New-Object System.Drawing.Size(120, 30)
 $form.Controls.Add($saveButton)
 $saveButton.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
 $saveButton.FlatAppearance.BorderSize = 1
 $saveButton.FlatAppearance.BorderColor = [System.Drawing.Color]::FromArgb(120, 120, 120)
 $saveButton.BackColor = [System.Drawing.Color]::FromArgb(150, 102, 102, 102)
-$saveButton.ForeColor = [System.Drawing.Color]::LightSalmon
+$saveButton.ForeColor = [System.Drawing.Color]::LightGreen
 
 $saveButton.Add_Click({
     foreach ($checkbox in $allFeatures) {
@@ -259,7 +293,7 @@ function Reset-AllSettings {
 
 $resetButton = New-Object System.Windows.Forms.Button
 $resetButton.Text = "Reset All Settings"
-$resetButton.Location = New-Object System.Drawing.Point(580,480)
+$resetButton.Location = New-Object System.Drawing.Point(570,580)
 $resetButton.Size = New-Object System.Drawing.Size(120, 30)
 $form.Controls.Add($resetButton)
 $resetButton.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
@@ -273,6 +307,68 @@ $resetButton.Add_Click({
     if (Reset-AllSettings) {
         if (-not (Test-Path -Path $registryPath)) {
             New-Item -Path $registryPath -Force | Out-Null
+        }
+    }
+})
+
+$exportButton.Add_Click({
+    $saveFileDialog = New-Object System.Windows.Forms.SaveFileDialog
+    $saveFileDialog.Filter = "JSON files (*.json)|*.json|All files (*.*)|*.*"
+    $saveFileDialog.Title = "Export SlimBrave Settings"
+    $saveFileDialog.InitialDirectory = [Environment]::GetFolderPath("MyDocuments")
+    $saveFileDialog.FileName = "SlimBraveSettings.json"
+    
+    if ($saveFileDialog.ShowDialog() -eq [System.Windows.Forms.DialogResult]::OK) {
+        $settingsToExport = @{
+            Features = @()
+            DnsMode = $dnsDropdown.SelectedItem
+        }
+        
+        foreach ($checkbox in $allFeatures) {
+            if ($checkbox.Checked) {
+                $settingsToExport.Features += $checkbox.Tag.Key
+            }
+        }
+        
+        try {
+            $settingsToExport | ConvertTo-Json | Out-File -FilePath $saveFileDialog.FileName -Force
+            [System.Windows.Forms.MessageBox]::Show("Settings exported successfully to:`n$($saveFileDialog.FileName)", "Export Successful", [System.Windows.Forms.MessageBoxButtons]::OK, [System.Windows.Forms.MessageBoxIcon]::Information)
+        } catch {
+            [System.Windows.Forms.MessageBox]::Show("Failed to export settings: $_", "Export Failed", [System.Windows.Forms.MessageBoxButtons]::OK, [System.Windows.Forms.MessageBoxIcon]::Error)
+        }
+    }
+})
+
+$importButton.Add_Click({
+    $openFileDialog = New-Object System.Windows.Forms.OpenFileDialog
+    $openFileDialog.Filter = "JSON files (*.json)|*.json|All files (*.*)|*.*"
+    $openFileDialog.Title = "Import SlimBrave Settings"
+    $openFileDialog.InitialDirectory = [Environment]::GetFolderPath("MyDocuments")
+    
+    if ($openFileDialog.ShowDialog() -eq [System.Windows.Forms.DialogResult]::OK) {
+        try {
+            $importedSettings = Get-Content -Path $openFileDialog.FileName -Raw | ConvertFrom-Json
+            
+            foreach ($checkbox in $allFeatures) {
+                $checkbox.Checked = $false
+            }
+            
+            foreach ($featureKey in $importedSettings.Features) {
+                foreach ($checkbox in $allFeatures) {
+                    if ($checkbox.Tag.Key -eq $featureKey) {
+                        $checkbox.Checked = $true
+                        break
+                    }
+                }
+            }
+            
+            if ($importedSettings.DnsMode) {
+                $dnsDropdown.SelectedItem = $importedSettings.DnsMode
+            }
+            
+            [System.Windows.Forms.MessageBox]::Show("Settings imported successfully from:`n$($openFileDialog.FileName)", "Import Successful", [System.Windows.Forms.MessageBoxButtons]::OK, [System.Windows.Forms.MessageBoxIcon]::Information)
+        } catch {
+            [System.Windows.Forms.MessageBox]::Show("Failed to import settings: $_", "Import Failed", [System.Windows.Forms.MessageBoxButtons]::OK, [System.Windows.Forms.MessageBoxIcon]::Error)
         }
     }
 })
