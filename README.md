@@ -11,6 +11,10 @@
 SlimBrave is a powerful PowerShell script designed for Windows users to streamline their Brave Browser experience by toggling and configuring unwanted features. With SlimBrave, you can easily disable or enable various Brave functionalities, customize settings, and improve privacy.
 
 ### Features:
+
+<details>
+<summary> Click here to view </summary>
+
 - **Disable Brave Rewards**  
    Brave's reward system.
 
@@ -44,8 +48,40 @@ SlimBrave is a powerful PowerShell script designed for Windows users to streamli
 - **Performance Optimization**  
    Disable background processes and unnecessary features.
 
-- **Reset All Settings**  
-   One-click removal of all modified Brave policy settings (with confirmation).
+- **Enable Do Not Track**  
+   Forces Do Not Track header for all browsing.
+
+- **Force Google SafeSearch**  
+   Enforces SafeSearch across Google searches.
+
+- **Disable IPFS**  
+   Disables InterPlanetary File System support.
+
+- **Disable Spellcheck**  
+   Disables browser spellcheck functionality.
+
+- **Disable Browser Sign-in**  
+   Prevents browser account sign-in.
+
+- **Disable Printing**  
+   Disables web page printing capability.
+
+- **Disable Incognito Mode**  
+   Blocks private browsing/incognito mode.
+
+- **Disable Default Browser Prompt**  
+   Stops Brave from asking to be default browser.
+
+- **Disable Developer Tools**  
+   Blocks access to developer tools.
+
+- **Always Open PDF Externally**  
+   Forces PDFs to open in external applications.
+
+- **Disable Brave Shields**  
+   Turns off Brave's built-in Shields protection.
+</details>
+
 ---
 
 # How to Run
@@ -93,7 +129,7 @@ In an era of increasingly bloated browsers, SlimBrave puts **you** back in contr
 
 ### Future Roadmap
 - [ ] Add preset configurations (Privacy, Performance, etc.)
-- [ ] Create backup/restore functionality
+- [✔] Create backup/restore functionality
 - [ ] Add support for Linux/Mac (WIP)
 
 ---
