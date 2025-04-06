@@ -100,6 +100,42 @@ iwr "https://raw.githubusercontent.com/ltx0101/SlimBrave/main/SlimBrave.ps1" -Ou
 <summary> Presets </summary>
 
 
+- **Maximum Privacy Preset**  
+   - Telemetry: Blocks all reporting (metrics, safe browsing, URL collection, feedback).
+   - Privacy: Disables autofill, password manager, sign-in, WebRTC leaks, QUIC, and forces Do Not Track.
+   - Brave Features: Kills Rewards, Wallet, VPN, AI Chat, Tor, and Sync.
+   - Performance: Disables background processes, recommendations, and bloat.
+   - DNS: Uses plain DNS (no HTTPS) to prevent potential logging by DoH providers.
+   - Best for: Paranoid users, journalists, activists, or anyone who wants Brave as private as possible.
+
+- **Balanced Privacy Preset**  
+   - Telemetry: Blocks all tracking but keeps basic safe browsing.
+   - Privacy: Blocks third-party cookies, enables Do Not Track, but allows password manager and autofill for addresses.
+   - Brave Features: Disables Rewards, Wallet, VPN, and AI features.
+   - Performance: Turns off background services and ads.
+   - DNS: Uses automatic DoH (lets Brave choose the fastest secure DNS).
+   - Best for: Most users who want privacy but still need convenience features.
+
+- **Performance Focused Preset**  
+   - Telemetry: Only blocks metrics and feedback surveys (keeps some safe browsing).
+   - Brave Features: Disables Rewards, Wallet, VPN, and AI to declutter the browser.
+   - Performance: Kills background processes, shopping features, and promotions.
+   - DNS: Automatic DoH for a balance of speed and security.
+   - Best for: Users who want a faster, cleaner Brave without extreme privacy tweaks.
+
+- **Developer Preset**  
+   - Telemetry: Blocks all reporting.
+   - Brave Features: Disables Rewards, Wallet, and VPN but keeps developer tools.
+   - Performance: Turns off background services and ads.
+   - DNS: Automatic DoH (default secure DNS).
+   - Best for: Developers who need dev tools but still want telemetry and ads disabled.
+
+- **Strict Parental Controls Preset**  
+   - Privacy: Blocks incognito mode, forces Google SafeSearch, and disables sign-in.
+   - Brave Features: Disables Rewards, Wallet, VPN, Tor, and dev tools.
+   - DNS: Uses custom DoH (can be set to a family-friendly DNS like Cloudflare for Families).
+   - Best for: Parents, schools, or workplaces that need restricted browsing.
+
 
 </details>
 
