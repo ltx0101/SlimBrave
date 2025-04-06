@@ -92,6 +92,19 @@ SlimBrave is a powerful PowerShell script designed for Windows users to streamli
 iwr "https://raw.githubusercontent.com/ltx0101/SlimBrave/main/SlimBrave.ps1" -OutFile "SlimBrave.ps1"; .\SlimBrave.ps1
 ```
 
+---
+
+## Extras:
+
+<details>
+<summary> Presets </summary>
+
+
+
+</details>
+
+
+
 <details>
 <summary> Requirements </summary>
 
