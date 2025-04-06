@@ -177,7 +177,7 @@ In an era of increasingly bloated browsers, SlimBrave puts **you** back in contr
 ---
 
 ### Future Roadmap
-- [ ] Add preset configurations (Privacy, Performance, etc.)
+- [x] Add preset configurations (Privacy, Performance, etc.)
 - [x] Create backup/restore functionality
 - [ ] Add support for Linux/Mac (WIP)
 
