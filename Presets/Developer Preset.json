@@ -1,0 +1,18 @@
+{
+    "Features": [
+        "MetricsReportingEnabled",
+        "SafeBrowsingExtendedReportingEnabled",
+        "UrlKeyedAnonymizedDataCollectionEnabled",
+        "FeedbackSurveysEnabled",
+        "BraveRewardsDisabled",
+        "BraveWalletDisabled",
+        "BraveVPNDisabled",
+        "BraveAIChatEnabled",
+        "BackgroundModeEnabled",
+        "MediaRecommendationsEnabled",
+        "ShoppingListEnabled",
+        "PromotionsEnabled",
+        "DefaultBrowserSettingEnabled"
+    ],
+    "DnsMode": "automatic"
+}

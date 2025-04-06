@@ -1,0 +1,28 @@
+{
+    "Features": [
+        "MetricsReportingEnabled",
+        "SafeBrowsingExtendedReportingEnabled",
+        "UrlKeyedAnonymizedDataCollectionEnabled",
+        "FeedbackSurveysEnabled",
+        "AutofillCreditCardEnabled",
+        "BrowserSignin",
+        "WebRtcIPHandling",
+        "QuicAllowed",
+        "BlockThirdPartyCookies",
+        "EnableDoNotTrack",
+        "ForceGoogleSafeSearch",
+        "IPFSEnabled",
+        "BraveRewardsDisabled",
+        "BraveWalletDisabled",
+        "BraveVPNDisabled",
+        "BraveAIChatEnabled",
+        "TorDisabled",
+        "SyncDisabled",
+        "BackgroundModeEnabled",
+        "MediaRecommendationsEnabled",
+        "ShoppingListEnabled",
+        "PromotionsEnabled",
+        "DefaultBrowserSettingEnabled"
+    ],
+    "DnsMode": "automatic"
+}

@@ -1,0 +1,16 @@
+{
+    "Features": [
+        "IncognitoModeAvailability",
+        "ForceGoogleSafeSearch",
+        "SafeBrowsingProtectionLevel",
+        "BrowserSignin",
+        "SyncDisabled",
+        "BraveRewardsDisabled",
+        "BraveWalletDisabled",
+        "BraveVPNDisabled",
+        "BraveAIChatEnabled",
+        "TorDisabled",
+        "DeveloperToolsDisabled"
+    ],
+    "DnsMode": "custom"
+}
