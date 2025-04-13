@@ -182,6 +182,11 @@ In an era of increasingly bloated browsers, SlimBrave puts **you** back in contr
 - [ ] Add support for Linux/Mac (WIP)
 
 ---
+<div align="center">
+   
+[![PayPal Donate](https://img.shields.io/badge/PayPal_Donate-s?style=for-the-badge&logo=paypal&logoColor=black)](https://paypal.me/AggelosMeta)
+
+</div>
 
 <div align="center">
   
